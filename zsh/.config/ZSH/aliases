@@ -57,8 +57,8 @@ alias ckitty='nvim /home/melal/.config/kitty/kitty.conf'
 source $ZSHdir/wall
 
 # git 
-
+alias gpl='git pull'
 alias gs='git status'
 alias ga='git add'
 alias gp='git push'
-alias gc='git commit'
+alias gc='git commit -m'
