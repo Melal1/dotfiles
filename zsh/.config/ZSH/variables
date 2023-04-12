@@ -1,0 +1,20 @@
+# Var
+ZSHdir=$HOME/.config/ZSH/ 
+Termfetch='neofetch'
+Hyprdir=$HOME/.config/hypr/
+Hyprwall=$HOME/.config/hypr/Src/Wallpapers
+
+# colors var 
+autoload -U colors && colors
+
+Red=%{$fg[red]%}
+Blue=%{$fg[blue]%}
+Yellow=%{$fg[yellow]%}
+Green=%{$fg[green]%}
+Magenta=%{$fg[magenta]%}
+White=%{$fg[white]%}
+Res=%{$reset_color%}
+
+# wallpaper
+Wall1=$Hyprwall/5.png
+Wall2=$Hyprwall/2.jpeg

@@ -1,0 +1,64 @@
+# Source Var
+source $HOME/.config/ZSH/variables
+
+
+# System
+alias shutit='shutdown now'
+
+
+# Printing
+alias hpp='lpoption -d'
+alias Lpimagep='lp -o portrait -o fit-to-page -o media=a4'
+alias Lpimagel='lp -o landscape -o fit-to-page -o media=a4'
+
+# Pacman
+alias p-s='sudo pacman -S'
+alias Syyu='sudo pacman -Syyu'
+alias p-r='sudo pacman -R'
+
+# Hyprland
+alias hconf='nvim $Hyprdir/hyprland.conf'
+alias hconfig='nvim $Hyprdir/'
+alias hcd='cd $Hyprdir'
+alias hscripts='cd $Hyprdir/Src/scripts'
+alias hauto='nvim $Hyprdir/Src/autostart'
+# ZSH
+alias zshrc='nvim $ZSHdir'
+alias zsh='nvim $ZSHdir/.zshrc'
+alias Hypr='sudo nvim /usr/bin/Hypr1'
+alias Src='source $ZSHdir/.zshrc'
+alias zcd='cd $ZSHdir'
+alias zalias='nvim $ZSHdir/aliases'
+alias zvar='nvim $ZSHdir/variables'
+
+
+
+# Terminal
+alias ll='ls -a'
+alias lll='ls -alh --color=auto'
+alias Storage='cd /media/Storage'
+alias Z0='unzip'
+alias Z0s='sudo unzip'
+alias v='nvim'
+alias V='sudo nvim'
+alias fet='$Termfetch'
+alias clock='tty-clock -ct'
+alias Avman='nvim /media/Storage/ArchLinux\ Setup'
+alias DT='cd /home/melal/.dotfiles'
+
+# nvim
+alias vr='nvim /'
+alias vh='nvim /home/melal/'
+alias vc='cd /home/melal/.config/ && nvim'
+# Kitty
+alias ckitty='nvim /home/melal/.config/kitty/kitty.conf'
+
+# wallpapers
+source $ZSHdir/wall
+
+# git 
+
+alias gs='git status'
+alias ga='git add'
+alias gp='git push'
+alias gc='git commit'
