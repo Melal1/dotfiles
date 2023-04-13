@@ -2,7 +2,7 @@
 ZSHdir=$HOME/.dotfiles/zsh/.config/ZSH/ 
 Termfetch='neofetch'
 Hyprdir=$HOME/.dotfiles/hypr/.config/hypr/
-Hyprwall=$Hylrdir/Src/Wallpapers
+Hyprwall=$Hyprdir/Src/Wallpapers
 
 # colors var 
 autoload -U colors && colors
