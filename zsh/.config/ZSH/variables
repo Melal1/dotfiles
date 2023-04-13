@@ -1,8 +1,8 @@
 # Var
-ZSHdir=$HOME/.config/ZSH/ 
+ZSHdir=$HOME/.dotfiles/zsh/.config/ZSH/ 
 Termfetch='neofetch'
-Hyprdir=$HOME/.config/hypr/
-Hyprwall=$HOME/.config/hypr/Src/Wallpapers
+Hyprdir=$HOME/.dotfiles/hypr/.config/hypr/
+Hyprwall=$Hylrdir/Src/Wallpapers
 
 # colors var 
 autoload -U colors && colors
