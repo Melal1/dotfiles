@@ -1,0 +1,17 @@
+systemctl suspend
+sudo pacman -Syyu
+DT
+ll
+cd nvim 
+cd .config
+ll
+DT
+git pull
+git branch nvim-new
+git branch 
+v
+ping www.google.com
+git checkout nvim-new
+v
+v
+Avman
