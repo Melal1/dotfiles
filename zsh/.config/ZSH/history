@@ -133,3 +133,121 @@ v options.lua
 v options.lua
 v options.lua
 v options.lua
+cd Src
+Src
+cd .dotfiles
+Src
+zsh
+Src
+cd .dotfiles
+a
+cd .dotfiles
+ckitty
+cd lua
+cdlua
+cd Mlela
+cd Melal
+v mappings.lua
+cd ..
+cd ..
+v lua
+v init.lua
+v init.lua
+cdlua
+cd Melal
+v mappings.lua
+v mappings.lua
+v mappings.lua
+v mappings.lua
+v mappings.lua
+v mappings.lua
+v mappings.lua
+v mappings.lua
+v mappings.lua
+v mappings.lua
+v mappings.lua
+v mappings.lua
+v options.lua
+v mappings.lua
+v mappings.lua
+v mappings.lua
+v mappings.lua
+DT
+ga .
+gc "nvim:created option and mappings"
+gs
+gp origin nvim-new
+git checkout main
+ll
+cd nvim
+ll
+cd .config
+ll
+DT
+gpl
+cd nvim/.config
+ll
+mv nvimold ~/git
+DT
+ga .
+gs
+gs
+gc "nvim: moved nvimold to home/git directory"
+gp origin main
+gs
+gpl
+v
+cd nvim/.config
+cd nvim
+v init.lua
+zalias
+DT
+git diff
+git log
+zalias
+gs
+git dif
+git diff
+ga .
+gc "added some aliases"
+gp origin main
+zalias
+Src
+gche Nvim-configuration-only
+cdlua
+gche main
+youtube zsh git 
+zsh
+cd 
+cd .config
+llg oh
+p-s gtop
+gtop
+zalias
+cc
+DT
+zhs
+zsh
+cd zsh/.config/ZSH
+ll
+mkdir themes
+cd themes
+v default
+Src
+zsh
+Src
+pwd
+v old
+cd ..
+cd ..
+cd ..
+cd ..
+cd zsh/.config/ZSH/themes
+zsh
+zsh
+v old
+pwd
+ll
+v old
+v old2
+v old2

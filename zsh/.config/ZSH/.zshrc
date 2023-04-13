@@ -3,10 +3,6 @@
 
 source $HOME/.config/ZSH/aliases
 
-# Enable colors and change prompt:
-#PS1 stands for the default PROMPT in /private/etc/zshrc
-#PS1="%B%{$fg[red]%}[%{$fg[yellow]%}M%{$fg[green]%}e%{$fg[blue]%}l%{$fg[yellow]%}a%{$fg[red]%}l%{$fg[magenta]%} %1~ %{$fg[red]%}]%{$fg[white]%}%b\n ➜ %{$reset_color%} "
-PS1="%B${Red}[${Yellow}M${Green}e${Blue}l${Yellow}a${Red}l${Magenta} %1~ ${Red}]%b${White} ➜ ${Res}"
 
 # History
 HISTFILE=$ZSHdir/history
@@ -25,7 +21,6 @@ compinit
 _comp_options+=(globdots)		# Include hidden files.
 
 
-#source ~/pkg/powerlevel10k/powerlevel10k.zsh-theme
 
 
 
@@ -54,5 +49,9 @@ source $ZSHdir/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $ZSHdir/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 
-# Start at startup 
+# -- Prompt Theme -- #
 
+
+source $ZSHdir/themes/old2
+
+# Start at startup 
