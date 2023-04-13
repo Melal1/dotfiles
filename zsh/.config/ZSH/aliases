@@ -34,6 +34,7 @@ alias zvar='nvim $ZSHdir/variables'
 
 
 # Terminal
+alias llg='ls -a | grep'
 alias ll='ls -a'
 alias lll='ls -alh --color=auto'
 alias Storage='cd /media/Storage'
@@ -57,7 +58,9 @@ alias ckitty='nvim /home/melal/.config/kitty/kitty.conf'
 # wallpapers
 source $ZSHdir/wall
 
-# git 
+# git
+alias glog='git log | grep'
+alias gche='git checkout'
 alias gpl='git pull'
 alias gs='git status'
 alias ga='git add'
