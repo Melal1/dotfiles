@@ -1,0 +1,135 @@
+systemctl suspend
+sudo pacman -Syyu
+DT
+ll
+cd nvim 
+cd .config
+ll
+DT
+git pull
+git branch nvim-new
+git branch 
+v
+ping www.google.com
+git checkout nvim-new
+v
+v
+Avman
+cd .config
+unlink nvim
+ll
+ll | grep nvim
+cdlua
+ll
+cd Melal
+ll
+v mappings.lua
+v mappings.lua
+v mappings.lua
+v mappings.lua
+v mappings.lua
+DT
+git checkout nvim-new
+v .gitignore
+git checkout nvim-new
+cd nvim/.config/nvim
+ll
+cd lua
+cd ..
+cd ..
+mv nvim nvimold
+mkdir nvim
+cd nvim
+v init.lua
+ll
+mkdir lua
+cd lua
+mkdir usr
+mv usr Melal
+ll
+cd Melal
+ll
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+cd ..
+cd ..
+ll
+v init.lua
+cd lua
+cd Melal
+ll
+v options.lua
+v options.lua
+DT
+stow nvim
+cd nvim/.config/nvim
+cd lua/Melal
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+cd ..
+cd ..
+zalias
+zvar
+zvar
+zalias
+Src
+cd lua
+ll
+cd Melal
+ll
+v \\ 
+rm \\ 
+ll
+v options.lua
+v mappings.lua
+v mappings.lua
+v options.lua
+v options.lua
+v mappings.lua
+mv options.lua 1.lua
+mv 1.lua ..
+v mappings.lua
+cd ..
+mv 1.lua Melal
+cd Melal
+ll
+mv 1.lua options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v mappings.lua
+ckitty
+cdlua
+cd Melal
+v mappings.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua
+v options.lua

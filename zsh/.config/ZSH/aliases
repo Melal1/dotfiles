@@ -50,6 +50,7 @@ alias DT='cd /home/melal/.dotfiles'
 alias vr='nvim /'
 alias vh='nvim /home/melal/'
 alias vc='cd /home/melal/.config/ && nvim'
+alias cdlua='cd $HOME/.dotfiles/nvim/.config/nvim/lua'
 # Kitty
 alias ckitty='nvim /home/melal/.config/kitty/kitty.conf'
 
