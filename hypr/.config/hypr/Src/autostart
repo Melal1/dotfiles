@@ -2,6 +2,7 @@ Hyprwall=/home/melal/.config/hypr/Src/Wallpapers
 source ~/.config/ZSH/variables
 # wallpaper
 swww init &
+sleep 3 &
 swww img -o HDMI-A-1 --transition-type center --transition-fps 75 --transition-duration 2 $Wall1 &
 swww img -o DP-1 --transition-type center --transition-fps 60 --transition-duration 2 $Wall2 &
 
