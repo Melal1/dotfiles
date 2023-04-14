@@ -1,4 +1,4 @@
 require('Melal.options')
 require('Melal.mappings')
 require('Melal.plugins')
-require('Melal.colorscheme')
+require('Melal.plugin-conf')
