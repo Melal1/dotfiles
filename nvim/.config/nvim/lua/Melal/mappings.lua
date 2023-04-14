@@ -42,7 +42,7 @@ km("n", "<C-Right>", ":vertical resize +2<CR>", SilentWnr)
 
 -- Insert --
 -- Press jk fast to enter
--- km("i", "jk", "<ESC>", SilentWnr)
+ km("i", "jk", "<ESC>", SilentWnr)
 
 -- Visual --
 -- Stay in indent mode / move text right and left
