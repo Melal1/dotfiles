@@ -38,7 +38,7 @@ o.number = true
 o.relativenumber = false
 o.numberwidth = 5
 -- Others
-o.termguicolors = false
+o.termguicolors = true
 o.signcolumn = "no"
 
 --\\ Backspace //--
@@ -60,3 +60,7 @@ o.writebackup = false
 o.backup = false
 o.swapfile = false
 o.undofile = true
+
+--\\ Words format //--
+
+o.iskeyword:append({"-","+","="})
