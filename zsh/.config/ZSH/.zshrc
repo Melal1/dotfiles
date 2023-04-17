@@ -23,7 +23,8 @@ _comp_options+=(globdots)		# Include hidden files.
 
 
 
-
+# add PATH
+export PATH="$HOME/.local/bin":$PATH
 
 
 #-----------------------------------------------------#
