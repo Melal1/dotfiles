@@ -1,4 +1,4 @@
--- Shorten function name
+
 local SilentWnr = { noremap = true, silent = true }
 
 local Silent = { silent = true }
@@ -17,16 +17,15 @@ vim.g.maplocalleader = " "
 --   visual_block_mode = "x",
 --   term_mode = "t",
 --   command_mode = "c",
-
--- Normal --
 -- Better window navigation
 km("n", "<C-h>", "<C-w>h", SilentWnr)
 km("n", "<C-j>", "<C-w>j", SilentWnr)
 km("n", "<C-k>", "<C-w>k", SilentWnr)
 km("n", "<C-l>", "<C-w>l", SilentWnr)
-
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
 km("n", "<leader>e", ":Lex 30<cr>", SilentWnr)
-
+vim.keymap.set({"n", "v"}, "<leader>d", '"_d<CR>')
 -- Quit Neovim/Window
 km("n", "<S-q>", ":q!<CR>", SilentWnr)
 
@@ -42,7 +41,7 @@ km("n", "<C-Right>", ":vertical resize +2<CR>", SilentWnr)
 
 -- Insert --
 -- Press jk fast to enter
- km("i", "jk", "<ESC>", SilentWnr)
+ km("i", "<C-c>", "<ESC>", SilentWnr)
 
 -- Visual --
 -- Stay in indent mode / move text right and left
@@ -59,8 +58,8 @@ km("v", "p", '"_dP', SilentWnr)
 -- Move text up and down
 km("x", "J", ":move '>+1<CR>gv-gv", SilentWnr)
 km("x", "K", ":move '<-2<CR>gv-gv", SilentWnr)
-km("x", "<A-j>", ":move '>+1<CR>gv-gv", SilentWnr)
-km("x", "<A-k>", ":move '<-2<CR>gv-gv", SilentWnr)
+--km("x", "<A-j>", ":move '>+1<CR>gv-gv", SilentWnr)
+--km("x", "<A-k>", ":move '<-2<CR>gv-gv", SilentWnr)
 
 -- Terminal --
 -- Better terminal navigation
@@ -68,4 +67,6 @@ km("t", "<C-h>", "<C-\\><C-N><C-w>h", Silent)
 km("t", "<C-j>", "<C-\\><C-N><C-w>j", Silent)
 km("t", "<C-k>", "<C-\\><C-N><C-w>k", Silent)
 km("t", "<C-l>", "<C-\\><C-N><C-w>l", Silent)
-
+-- Telescope --
+km("n", "<leader>f", "<cmd>lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown())<cr>", SilentWnr)
+km("n", "<c-t>", "<cmd>Telescope live_grep<cr>", SilentWnr)
