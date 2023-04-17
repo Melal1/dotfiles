@@ -1,7 +1,0 @@
-require('Melal.options')
---require('Melal.mappings')
-require('Melal.plugins')
-require("Melal.plugin-conf")
-require("Melal.plugin-conf.lsp")
-require('Melal.plugin-conf.telescope')
---require("Melal.plugin-conf.map")
