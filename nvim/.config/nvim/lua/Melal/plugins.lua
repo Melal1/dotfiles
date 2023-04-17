@@ -1,4 +1,3 @@
-local fn = vim.fn
 
 -- if u want to  automatically install packer if not uncommnet --
 
@@ -25,72 +24,92 @@ if fn.empty(fn.glob(install_path)) > 0 then
 -- Autocommand that reloads neovim whenever you save the plugins.lua file
 
 
-vim.cmd [[
+--[[vim.cmd [[
   augroup packer_user_config
     autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerSync
+    autocmd BufWritePost plugins.lua source <afile> |
   augroup end
 ]]
 
-
+--]]
 
 
 -- Use a protected call so we don't error out on first use --
 
-local status_ok, packer = pcall(require, "packer")
+
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+
+
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
+
+local plugins = {
+
+   "wbthomason/packer.nvim", -- Have packer manage itself
+  -- important plugins 
+   "nvim-lua/popup.nvim", -- An implementation of the Popup API from vim in Neovim
+   "nvim-lua/plenary.nvim", -- Useful lua functions used ny lots of plugins
+  --
+-- Color Schemes 
+ "lunarvim/darkplus.nvim",
+
+  -- cmp plugins
+   "hrsh7th/nvim-cmp", -- The completion plugin
+   "hrsh7th/cmp-buffer", -- buffer completions
+   "hrsh7th/cmp-path", -- path completions
+   "hrsh7th/cmp-cmdline", -- cmdline completions
+   "saadparwaiz1/cmp_luasnip", -- snippet completions
+
+  -- snippets
+   "L3MON4D3/LuaSnip", --snippet engine
+   "rafamadriz/friendly-snippets", -- a bunch of snippets to use
+
+
+
+  -- LSP
+   "neovim/nvim-lspconfig", -- enable LSP
+   "williamboman/mason.nvim", -- simple to use language server installer
+   "williamboman/mason-lspconfig.nvim", -- simple to  language server installer
+   'jose-elias-alvarez/null-ls.nvim', -- LSP diagnostics and code actions
+   -- telescope
+   {'nvim-telescope/telescope.nvim', tag = '0.1.1'},
+   'nvim-telescope/telescope-media-files.nvim',
+    "cljoly/telescope-repo.nvim" ,
+    "nvim-telescope/telescope-file-browser.nvim",
+    "nvim-telescope/telescope-ui-select.nvim",
+    "dhruvmanila/telescope-bookmarks.nvim",
+    "nvim-telescope/telescope-github.nvim",
+    "LinArcX/telescope-command-palette.nvim" ,
+    {
+      "AckslD/nvim-neoclip.lua",
+      config = function() require("neoclip").setup() end,
+    },
+    
+    { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+    "jvgrootveld/telescope-zoxide",
+
+
+    }
+
+local opts = {}
+
+--[[local status_ok, lazy = pcall(require, ("lazy").setup(plugins, opts))
+
 if not status_ok then
   vim.nofity("pk erorr")
   return
-end
-
--- Have packer use a popup window --
-
-packer.init {
-  display = {
-    open_fn = function()
-      return require("packer.util").float { border = "rounded" }
-    end,
-  },
-}
-
--- Install your plugins here
-return packer.startup(function(use)
-
-  use "wbthomason/packer.nvim" -- Have packer manage itself
-  -- important plugins 
-  use "nvim-lua/popup.nvim" -- An implementation of the Popup API from vim in Neovim
-  use "nvim-lua/plenary.nvim" -- Useful lua functions used ny lots of plugins
-  --
--- Color Schemes 
-use "lunarvim/darkplus.nvim"
-
-  -- cmp plugins
-  use "hrsh7th/nvim-cmp" -- The completion plugin
-  use "hrsh7th/cmp-buffer" -- buffer completions
-  use "hrsh7th/cmp-path" -- path completions
-  use "hrsh7th/cmp-cmdline" -- cmdline completions
-  use "saadparwaiz1/cmp_luasnip" -- snippet completions
-
-  -- snippets
-  use "L3MON4D3/LuaSnip" --snippet engine
-  use "rafamadriz/friendly-snippets" -- a bunch of snippets to use
-
-
-
-
-
-
-
-
-
-
-
-
-
-  -- Automatically set up your configuration after cloning packer.nvim
-  -- Put this at the end after all plugins
-  if PACKER_BOOTSTRAP then
-    require("packer").sync()
-  end
-end)
-
+end --]]
+require("lazy").setup(plugins, opts)
+-- require("lazy").setup(plugins, opts)
