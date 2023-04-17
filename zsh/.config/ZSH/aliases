@@ -47,12 +47,14 @@ alias clock='tty-clock -ct'
 alias Avman='nvim /media/Storage/ArchLinux\ Setup'
 alias DT='cd /home/melal/.dotfiles'
 alias confrm='rm -ir fontconfig hypr kitty neofetch nvim ZSH'
-alias مص='shutdown now'
 
 
 # nvim
 alias vr='nvim /'
 alias vh='nvim /home/melal/'
+alias cnvim='nvim ~/.dotfiles/nvim/.config/nvim/'
+alias cmvim='nvim ~/.dotfiles/nvim/.config/nvim/lua/Melal/'
+alias cinit='nvim ~/.dotfiles/nvim/.config/nvim/init.lua'
 alias vc='cd /home/melal/.config/ && nvim'
 alias cdlua='cd $HOME/.dotfiles/nvim/.config/nvim/lua'
 # Kitty
