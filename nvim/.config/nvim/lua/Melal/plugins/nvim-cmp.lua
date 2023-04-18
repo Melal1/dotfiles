@@ -5,10 +5,25 @@ if not ok then
 end
 
 -- Import luasnip plugin safely
-ok, luasnip = pcall(require, "luasnip")
+local luaok, luasnip = pcall(require, "luasnip")
 if not ok then
   return
 end
+
+local lspkind_status, lspkind = pcall(require, "lspkind")
+if not lspkind_status then 
+  print(" lspkind is not working or not installed")
+  return 
+end 
+
+
+
+
+
+
+
+
+
 
 -- Load vs-code like snippets from plugins (e.g. friendly-snippets)
 require("luasnip/loaders/from_vscode").lazy_load()
@@ -47,20 +62,17 @@ cmp.setup({
     end,
   },
   sources = {
-    -- {name = }
+    {name = "nvim_lsp"},
     { name = "luasnip" }, -- snippets
     { name = "buffer" }, -- text within current buffer
     { name = "path" }, -- file system paths
   },
+
+--  configure lspkind for vs-code like icons
+  formatting = {
+    format = lspkind.cmp_format({
+      maxwidth = 50,
+      ellipsis_char = "...",
+    }),
+  },
 })
-
-
-
-
---   -- configure lspkind for vs-code like icons
---   formatting = {
---     format = lspkind.cmp_format({
---       maxwidth = 50,
---       ellipsis_char = "...",
---     }),
---   },

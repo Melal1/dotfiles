@@ -1,7 +1,6 @@
---\\ Variable //-- 
+--\\ Variable //--
 
 local o = vim.opt
-
 
 --\\ Tab //--
 
@@ -25,21 +24,21 @@ o.incsearch = true
 --\\ appearance //--
 
 -- Down
-cmdheight = 1
-pumheight = 10
-o.showmode = false 
+o.cmdheight = 1
+o.pumheight = 10
+o.showmode = false
 -- Up
-showtablines = false
+--o.showtablines = false
 -- Split
-splitbelow = true
-splitright = true
+o.splitbelow = true
+o.splitright = true
 -- Num
-o.number = true 
+o.number = true
 o.relativenumber = false
 o.numberwidth = 5
 -- Others
 o.termguicolors = true
-o.signcolumn = "no"
+o.signcolumn = "yes"
 o.completeopt = "menu,menuone,noselect"
 
 --\\ Backspace //--
@@ -64,4 +63,4 @@ o.undofile = true
 
 --\\ Words format //--
 
-o.iskeyword:append({"-","+","="})
+o.iskeyword:append({ "-", "+", "=" })
