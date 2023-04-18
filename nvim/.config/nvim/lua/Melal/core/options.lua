@@ -19,7 +19,7 @@ o.wrap = true
 
 o.ignorecase = true
 o.smartcase = true
-o.hlsearch = false
+o.hlsearch = true
 o.incsearch = true
 
 --\\ appearance //--
