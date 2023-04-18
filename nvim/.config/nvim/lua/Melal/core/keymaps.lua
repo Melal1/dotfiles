@@ -20,4 +20,7 @@ keym.set("n", "<leader>e", ":NvimTreeToggle<CR>")
 -- keym.set("n", "<leader>ne", ":NvimTreeFocus<CR>")
 
 
-
+-- Telescope 
+keym.set("n", "<leader>ff", "<cmd>Telescope find_files<CR>")
+keym.set("n", "<leader>fs", "<cmd>Telescope live_grep<CR>")    --- Needs ripgrep 
+keym.set("n", "<leader>fc", "<cmd>Telescope grep_string<CR>")  -- Needs ripfrep 
