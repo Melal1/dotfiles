@@ -5,5 +5,6 @@ require('Melal.core.keymaps')
 require('Melal.plugins.comment')
 require('Melal.plugins.nvim-tree')
 require('Melal.plugins.telescope')
+require('Melal.plugins.nvim-cmp')
 --require('Melal.plugins.lualine')
 

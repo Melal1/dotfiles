@@ -40,6 +40,7 @@ o.numberwidth = 5
 -- Others
 o.termguicolors = true
 o.signcolumn = "no"
+o.completeopt = "menu,menuone,noselect"
 
 --\\ Backspace //--
 
