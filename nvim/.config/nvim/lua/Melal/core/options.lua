@@ -40,7 +40,7 @@ o.numberwidth = 5
 o.termguicolors = true
 o.signcolumn = "yes"
 o.completeopt = "menu,menuone,noselect"
-
+o.laststatus = 3
 --\\ Backspace //--
 
 o.backspace = "indent,eol,start"

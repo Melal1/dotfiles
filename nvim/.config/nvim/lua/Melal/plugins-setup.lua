@@ -20,6 +20,8 @@ local plugins = {
 	"lunarvim/darkplus.nvim",
 	"morhetz/gruvbox",
 	"nvim-tree/nvim-web-devicons", -- vs code icons
+	"rebelot/kanagawa.nvim",
+	"norcalli/nvim-colorizer.lua",
 	-- Nvim tree
 	"nvim-tree/nvim-tree.lua",
 
@@ -78,8 +80,27 @@ local plugins = {
 
 	-- git integration
 	"lewis6991/gitsigns.nvim", -- show line modifications on left hand side
-}
 
+	-- Lualine
+	{
+		"nvim-lualine/lualine.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons", lazy = true },
+	},
+
+	-- Indent Guides
+	"lukas-reineke/indent-blankline.nvim",
+
+	{
+		"glepnir/dashboard-nvim",
+		event = "VimEnter",
+		config = function()
+			require("dashboard").setup({
+				-- config
+			})
+		end,
+		dependencies = { { "nvim-tree/nvim-web-devicons" } },
+	},
+}
 local opts = {}
 
 require("lazy").setup(plugins, opts)
