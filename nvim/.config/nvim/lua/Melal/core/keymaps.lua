@@ -29,7 +29,7 @@ key.set("v", "<", "<gv", opts)
 key.set("v", ">", ">gv", opts)
 
 -- comment
-key.set("n", "<m-/>", "<cmd>lua require('Comment.api').toggle_current_linewise()<CR>", opts)
+-- key.set("n", "<m-/>", "<cmd>lua require('Comment.api').toggle_current_linewise()<CR>", opts)
 
 -- Resize with arrows
 key.set("n", "<C-Up>", ":resize -2<CR>", opts)
@@ -49,7 +49,7 @@ key.set("n", "<leader>fc", "<cmd>Telescope grep_string<CR>", opts) -- Needs ripf
 key.set("n", "<S-l>", ":bnext<CR>", opts)
 key.set("n", "<S-h>", ":bprevious<CR>", opts)
 key.set("n", "Q", "<cmd>bdelete!<CR>", opts)
--- Mvoe text up & down
+-- Move text up & down
 key.set("x", "<A-j>", ":move '>+1<CR>gv-gv", opts)
 key.set("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
 
@@ -57,3 +57,8 @@ key.set("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
 key.set("n", "<F2>", "<cmd>lua Allgit_toggle()<CR>", opts)
 key.set("n", "<F3>", "<cmd>lua Sysmon_toggle()<CR>", opts)
 key.set("n", "<F4>", "<cmd>lua Dtgit_toggle()<CR>", opts)
+-- Dashboard
+key.set("n", "<F13>", "<cmd>Dashboard<CR>", opts)
+-- insert mode
+key.set("i", "<C-f>", "<ESC>wa")
+key.set("i", "<C-b>", "<ESC>bi")
