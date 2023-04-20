@@ -100,7 +100,9 @@ local plugins = {
 		end,
 		dependencies = { { "nvim-tree/nvim-web-devicons" } },
 	},
-	{ "akinsho/toggleterm.nvim", version = "*", config = true },
+	"akinsho/toggleterm.nvim",
+	-- Bufferline
+	"akinsho/bufferline.nvim",
 }
 local opts = {}
 
