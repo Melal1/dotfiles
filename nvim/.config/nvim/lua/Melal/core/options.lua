@@ -28,7 +28,7 @@ o.cmdheight = 1
 o.pumheight = 10
 o.showmode = false
 -- Up
---o.showtablines = false
+o.showtabline = 2 
 -- Split
 o.splitbelow = true
 o.splitright = true
