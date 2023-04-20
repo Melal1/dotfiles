@@ -1,8 +1,8 @@
 -- Protected call for color scheme --
 
---local color = "darkplus"
+local color = "darkplus"
 -- local color = "gruvbox"
-local color = "kanagawa-dragon"
+-- local color = "kanagawa-dragon"
 local defcolor = "slate"
 
 ---@diagnostic disable-next-line: param-type-mismatch
