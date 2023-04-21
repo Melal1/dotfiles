@@ -28,7 +28,7 @@ o.cmdheight = 1
 o.pumheight = 10
 o.showmode = false
 -- Up
-o.showtabline = 2 
+o.showtabline = 2
 -- Split
 o.splitbelow = true
 o.splitright = true
@@ -60,7 +60,7 @@ o.writebackup = false
 o.backup = false
 o.swapfile = false
 o.undofile = true
-
+o.updatetime = 250 
 --\\ Words format //--
 
-o.iskeyword:append({ "-", "+", "=" })
+o.iskeyword:append{ "-", "+", "=" }
