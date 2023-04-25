@@ -31,7 +31,7 @@ function enter(prompt_bunfr)
 	vim.cmd(cmd)
 	vim.fn.jobstart(save) -- for no error
 	ac.close(prompt_bunfr)
-	vim.notify("theme " .. sel[1] .. " selected")
+	vim.notify("The theme " .. sel[1] .. " has been selected")
 end
 
 -- reload theme on select

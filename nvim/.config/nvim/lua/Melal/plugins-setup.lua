@@ -112,6 +112,11 @@ local plugins = {
 
 	-- my theme switcher
 	"Melal1/nvim-theme-switcher",
+
+	-- Discoed Status
+	"andweeb/presence.nvim",
+	-- Project
+	"ahmedkhalf/project.nvim",
 }
 local opts = {}
 

@@ -10,4 +10,4 @@
 -- 	print("The color scheme " .. color .. " not found , used " .. defcolor .. " instead ~")
 -- 	return
 -- end
-vim.cmd([[colorscheme vscode]])
+vim.cmd([[colorscheme kanagawa-dragon]])

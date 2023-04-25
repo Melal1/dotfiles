@@ -41,7 +41,7 @@ key.set("n", "<leader>e", ":NvimTreeToggle<CR>", opts)
 key.set("n", "<leader>fn", ":NvimTreeFocus<CR>", opts)
 
 -- Telescope
-key.set("n", "<leader>ff", "<cmd>Telescope find_files<CR>", opts)
+key.set("n", "<leader>ff", "<cmd>Telescope find_files hidden=true<CR>", opts)
 key.set("n", "<leader>fs", "<cmd>Telescope live_grep<CR>", opts) --- Needs ripgrep
 key.set("n", "<leader>fc", "<cmd>Telescope grep_string<CR>", opts) -- Needs ripfrep
 
