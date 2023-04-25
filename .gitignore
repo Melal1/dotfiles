@@ -1,3 +1,5 @@
 .zcompdump
 history
-packer_compiled.lua
+# colorschme.lua
+
+# nvim/.config/nvim/lua/Melal/core/colorscheme.lua
