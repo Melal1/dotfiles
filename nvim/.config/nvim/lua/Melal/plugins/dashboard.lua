@@ -75,7 +75,7 @@ dash.setup({
 				desc_hl = "String",
 				key = "e",
 				-- keymap = "SPC f d",
-				action = ":terminal size=100 lazygit",
+				action = ":lua Allgit_toggle()",
 			},
 			{
 				icon = "󰔎 ",
@@ -83,7 +83,7 @@ dash.setup({
 				desc = "Themes",
 				desc_hl = "String",
 				key = "f",
-				action = ":edit $HOME/.config/nvim/lua/Melal/core/colorscheme.lua",
+				action = ":luafile ~/.config/nvim/lua/Melal/plugins/MelalthemeSw.lua",
 			},
 			{
 				icon = " ",

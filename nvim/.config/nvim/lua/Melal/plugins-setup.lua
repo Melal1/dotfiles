@@ -17,8 +17,14 @@ local plugins = {
 	"nvim-lua/plenary.nvim",
 
 	-- Color Schemes and icons
+	-- Schemes
 	"lunarvim/darkplus.nvim",
+	"Mofiqul/vscode.nvim",
+	"Mofiqul/adwaita.nvim",
+	{ "decaycs/decay.nvim", name = "decay" },
+	"nyoom-engineering/oxocarbon.nvim",
 	"morhetz/gruvbox",
+	-- Icons
 	"nvim-tree/nvim-web-devicons", -- vs code icons
 	"rebelot/kanagawa.nvim",
 	"norcalli/nvim-colorizer.lua",
@@ -103,6 +109,9 @@ local plugins = {
 	"akinsho/toggleterm.nvim",
 	-- Bufferline
 	"akinsho/bufferline.nvim",
+
+	-- my theme switcher
+	"Melal1/nvim-theme-switcher",
 }
 local opts = {}
 

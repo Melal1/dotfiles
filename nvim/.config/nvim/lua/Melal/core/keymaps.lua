@@ -59,6 +59,12 @@ key.set("n", "<F3>", "<cmd>lua Sysmon_toggle()<CR>", opts)
 key.set("n", "<F4>", "<cmd>lua Dtgit_toggle()<CR>", opts)
 -- Dashboard
 key.set("n", "<F13>", "<cmd>Dashboard<CR>", opts)
+
 -- insert mode
 key.set("i", "<C-f>", "<ESC>wa")
 key.set("i", "<C-b>", "<ESC>bi")
+-- key.set("i", "<C-j>", "<ESC>ji")
+-- key.set("i", "<C-k>", "<ESC>ki")
+
+-- Theme switcher
+key.set("n", "<leader>th", "<cmd>luafile ~/.config/nvim/lua/Melal/plugins/MelalthemeSw.lua<CR>")

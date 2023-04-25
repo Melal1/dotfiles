@@ -22,7 +22,7 @@ o.hlsearch = true
 o.incsearch = true
 
 --\\ appearance //--
-
+-- vim.api.nvim_set_hl(0, "LuaString", { bg = "#1D1C19", fg = "#8a9a7b" })
 -- Down
 o.cmdheight = 1
 o.pumheight = 10
@@ -60,7 +60,7 @@ o.writebackup = false
 o.backup = false
 o.swapfile = false
 o.undofile = true
-o.updatetime = 250 
+o.updatetime = 250
 --\\ Words format //--
 
-o.iskeyword:append{ "-", "+", "=" }
+o.iskeyword:append({ "-", "+", "=" })
