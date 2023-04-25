@@ -60,6 +60,6 @@ local SystemMonitoring = Terminal:new({
 	size = 20,
 })
 
-function SYSMON_toggle()
+function Sysmon_toggle()
 	SystemMonitoring:toggle()
 end

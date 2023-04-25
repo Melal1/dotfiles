@@ -21,7 +21,6 @@ local check_backspace = function()
 	local col = vim.fn.col(".") - 1
 	return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
 end
-
 -- custom icons
 
 local kind_icons = {
@@ -55,18 +54,28 @@ local kind_icons = {
 -- Load vs-code like snippets from plugins (e.g. friendly-snippets)
 require("luasnip/loaders/from_vscode").lazy_load()
 
+--
+--
+--
+-- CMD setup
+--
+--
+--
+
 cmp.setup({
 	snippet = {
 		expand = function(args)
 			luasnip.lsp_expand(args.body)
 		end,
 	},
-  window = {
-    completion = cmp.config.window.bordered{{
-      border = "double",
-      winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,CursorLine:Pmenusel,Search:None"
-    }}
-  }
+	window = {
+		completion = cmp.config.window.bordered({
+			{
+				border = "double",
+				winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,CursorLine:Pmenusel,Search:None",
+			},
+		}),
+	},
 	mapping = {
 		["<C-k>"] = cmp.mapping.select_prev_item(), -- previous suggestion
 		["<C-j>"] = cmp.mapping.select_next_item(), -- next suggestion
