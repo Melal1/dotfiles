@@ -1,5 +1,5 @@
 # Source Var
-source $HOME/.config/ZSH/variables
+source $HOME/.config/ZSH/core/variables
 
 
 # System
@@ -8,8 +8,8 @@ alias shutit='shutdown now'
 
 # Printing
 alias hpp='lpoption -d'
-alias Lpimagep='lp -o portrait -o fit-to-page -o media=a4'
-alias Lpimagel='lp -o landscape -o fit-to-page -o media=a4'
+alias lpimagep='lp -o portrait -o fit-to-page -o media=a4'
+alias lpimagel='lp -o landscape -o fit-to-page -o media=a4'
 
 # Pacman
 alias p-s='sudo pacman -S'
@@ -24,12 +24,12 @@ alias hscripts='cd $Hyprdir/Src/scripts'
 alias hauto='nvim $Hyprdir/Src/autostart'
 # ZSH
 alias zshrc='nvim $ZSHdir'
-alias zsh='nvim $ZSHdir/.zshrc'
+alias zsh='nvim $ZSHdir/core/.zshrc'
 alias Hypr='sudo nvim /usr/bin/Hypr1'
-alias Src='source $ZSHdir/.zshrc'
+alias Src='source $ZSHdir/core/.zshrc'
 alias zcd='cd $ZSHdir'
-alias zalias='nvim $ZSHdir/aliases'
-alias zvar='nvim $ZSHdir/variables'
+alias zalias='nvim $ZSHdir/core/aliases'
+alias zvar='nvim $ZSHdir/core/variables'
 
 
 
@@ -59,9 +59,10 @@ alias vc='cd /home/melal/.config/ && nvim'
 alias cdlua='cd $HOME/.dotfiles/nvim/.config/nvim/lua'
 # Kitty
 alias ckitty='nvim /home/melal/.config/kitty/kitty.conf'
-
+# neovide
+alias vi='env -u WAYLAND_DISPLAY neovide --novsync'
 # wallpapers
-source $ZSHdir/wall
+source $ZSHdir/core/wall
 
 # git
 alias glog='git log | grep'
@@ -71,3 +72,7 @@ alias gs='git status'
 alias ga='git add'
 alias gp='git push'
 alias gc='git commit -m'
+
+# other 
+alias whatsapp='xdg-open https://web.whatsapp.com/'
+

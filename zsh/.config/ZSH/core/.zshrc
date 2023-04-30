@@ -1,7 +1,7 @@
 # Source aliases & Var 'the var in the aliases file'
 
 
-source $HOME/.config/ZSH/aliases
+source $HOME/.config/ZSH/core/aliases
 
 
 # History
@@ -25,7 +25,7 @@ _comp_options+=(globdots)		# Include hidden files.
 
 # add PATH
 export PATH="$HOME/.local/bin":$PATH
-
+export PATH="$HOME/.config/emacs/bin:$PATH"
 
 #-----------------------------------------------------#
 #      _____  _             _           
@@ -37,8 +37,6 @@ export PATH="$HOME/.local/bin":$PATH
 #                      __/ |            
 #                     |___/             
 #-----------------------------------------------------#
-
-
 
 # source web search plugin
 source $ZSHdir/plugins/web\ search.zsh
@@ -53,6 +51,6 @@ source $ZSHdir/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # -- Prompt Theme -- #
 
 
-source $ZSHdir/themes/old2
+source $ZSHdir/core/themes/old2
 
 # Start at startup 
