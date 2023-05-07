@@ -10,7 +10,7 @@ alias shutit='shutdown now'
 alias hpp='lpoption -d'
 alias lpimagep='lp -o portrait -o fit-to-page -o media=a4'
 alias lpimagel='lp -o landscape -o fit-to-page -o media=a4'
-
+alias print='xdg-open http://localhost:631/'
 # Pacman
 alias p-s='sudo pacman -S'
 alias Syyu='sudo pacman -Syyu'

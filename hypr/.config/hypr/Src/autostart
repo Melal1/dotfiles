@@ -17,7 +17,8 @@ swww img -o DP-1 --transition-type center --transition-fps 60 --transition-durat
 # clipboard manager
 
 wl-paste --watch cliphist store &
-
+# waybar 
+# waybar &
 
 # other
 
