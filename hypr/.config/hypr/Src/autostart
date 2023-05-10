@@ -4,7 +4,7 @@ source ~/.config/ZSH/core/variables
 
 # imortwallpapers
 
-Hyprwall=/home/melal/.config/hypr/Src/Wallpapers
+# Hyprwall=/home/melal/.config/hypr/Src/Wallpapers
 
 # wallpaper
 
@@ -18,9 +18,10 @@ swww img -o DP-1 --transition-type center --transition-fps 60 --transition-durat
 
 wl-paste --watch cliphist store &
 # waybar 
-# waybar &
+waybar &
 
 # other
+#
 
 
 dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP &

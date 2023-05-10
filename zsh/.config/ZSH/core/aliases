@@ -47,7 +47,7 @@ alias clock='tty-clock -ct'
 alias Avman='nvim /media/Storage/ArchLinux\ Setup'
 alias DT='cd /home/melal/.dotfiles'
 alias confrm='rm -ir fontconfig hypr kitty neofetch nvim ZSH'
-
+alias wybar='$HOME/.config/waybar/waybar.sh'
 
 # nvim
 alias vr='nvim /'
