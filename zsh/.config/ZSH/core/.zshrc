@@ -25,7 +25,7 @@ _comp_options+=(globdots)		# Include hidden files.
 
 # add PATH
 export PATH="$HOME/.local/bin":$PATH
-export PATH="$HOME/.config/emacs/bin:$PATH"
+# export PATH="$HOME/.config/emacs/bin:$PATH"
 
 #-----------------------------------------------------#
 #      _____  _             _           

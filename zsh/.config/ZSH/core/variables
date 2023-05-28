@@ -1,5 +1,5 @@
 # Var
-ZSHdir=$HOME/.dotfiles/zsh/.config/ZSH/ 
+ZSHdir=$HOME/.config/ZSH/ 
 Termfetch='neofetch'
 Hyprdir=$HOME/.dotfiles/hypr/.config/hypr/
 Hyprwall=$Hyprdir/Src/Wallpapers
