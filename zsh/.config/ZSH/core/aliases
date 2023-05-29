@@ -50,6 +50,7 @@ alias confrm='rm -ir fontconfig hypr kitty neofetch nvim ZSH'
 alias wybar='$HOME/.config/waybar/waybar.sh'
 
 # nvim
+alias vim='nvim'
 alias vr='nvim /'
 alias vh='nvim /home/melal/'
 alias cnvim='nvim ~/.dotfiles/nvim/.config/nvim/'
