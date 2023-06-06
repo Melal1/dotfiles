@@ -302,7 +302,7 @@ globalkeys = gears.table.join(
 	end, { description = "open a terminal", group = "launcher" }),
 	awful.key({ modkey }, "c", function()
 		awful.spawn(wbrowser)
-	end, { description = "open the web browser", group = "launcher" }),
+	end, { description = "open the web browser", group = "client" }),
 	awful.key({ modkey, "Control" }, "r", awesome.restart, { description = "reload awesome", group = "awesome" }),
 	awful.key({ modkey, "Shift" }, "q", awesome.quit, { description = "quit awesome", group = "awesome" }),
 
@@ -341,7 +341,7 @@ globalkeys = gears.table.join(
 
 	-- Prompt
 	awful.key({ modkey }, "r", function()
-		awful.util.spawn("rofi -show run")
+		awful.util.spawn("rofi -show drun")
 	end, { description = "run rofi", group = "launcher" }),
 
 	awful.key({ modkey }, "x", function()

@@ -22,6 +22,12 @@ alias hconfig='nvim $Hyprdir/'
 alias hcd='cd $Hyprdir'
 alias hscripts='cd $Hyprdir/Src/scripts'
 alias hauto='nvim $Hyprdir/Src/autostart'
+
+# AwesomeWM
+alias aconf='nvim $Awesomedir/rc.lua'
+alias aconfig='nvim $Awesomedir/'
+alias acd='cd $Awesomedir/'
+
 # ZSH
 alias zshrc='nvim $ZSHdir'
 alias zsh='nvim $ZSHdir/core/.zshrc'

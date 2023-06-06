@@ -1,5 +1,6 @@
 # Var
 ZSHdir=$HOME/.config/ZSH/ 
+Awesomedir=$HOME/.config/awesome/
 Termfetch='neofetch'
 Hyprdir=$HOME/.dotfiles/hypr/.config/hypr/
 Hyprwall=$Hyprdir/Src/Wallpapers
