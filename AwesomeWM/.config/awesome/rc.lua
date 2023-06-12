@@ -303,6 +303,10 @@ globalkeys = gears.table.join(
 	awful.key({ modkey }, "c", function()
 		awful.spawn(wbrowser)
 	end, { description = "open the web browser", group = "client" }),
+	awful.key({ modkey }, "]", function()
+		awful.spawn.with_shell("~/.config/awesome/micmute.sh")
+	end, { description = "micmute", group = "client" }),
+
 	awful.key({ modkey, "Control" }, "r", awesome.restart, { description = "reload awesome", group = "awesome" }),
 	awful.key({ modkey, "Shift" }, "q", awesome.quit, { description = "quit awesome", group = "awesome" }),
 

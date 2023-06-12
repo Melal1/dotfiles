@@ -1,0 +1,20 @@
+#! /bin/bash
+
+# # # notfiy-send "Enter Your Resolation : "
+# # read -p "Your Resolation : " Resolation
+# # notfiy-send " Your Resolation is $Resolation"
+# # # notfiy-send "your enterd Resolation is : $Resolation"
+# notfiy-send -e "Enter Your Screenshot name : "
+# read imagename
+#
+# scrot $output
+
+output="$HOME/Documents/%Y-%m-%d-%T.png"
+
+case "$1" in 
+  "sel") scrot "$output" --select --line mode=edge && notify-send "Screenshot was taken" ||{ notify-send "scrot not found"; exit; } ;;
+  "wind") scrot "$output" --focused --border && notify-send "Screenshot was taken" || { notify-send "scrot not found"; exit; } ;;
+  *) scrot "$output" && notify-send "Screenshot was taken"  || { notify-send "scrot not found"; exit; } ;;
+esac 
+
+

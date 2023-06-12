@@ -13,6 +13,7 @@ alias lpimagel='lp -o landscape -o fit-to-page -o media=a4'
 alias print='xdg-open http://localhost:631/'
 # Pacman
 alias p-s='sudo pacman -S'
+alias p-ss='sudo pacman -Ss'
 alias Syyu='sudo pacman -Syyu'
 alias p-r='sudo pacman -R'
 
