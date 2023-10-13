@@ -63,7 +63,7 @@ echo "--------------------------------------"
 echo "-- Installing Arch Base --"
 echo "--------------------------------------"
 
-pacstrap /mnt linux linux-firmware base base-deve $CPU-ucode vim nvim --noconfrim --needed
+pacstrap /mnt linux linux-firmware base base-deve $CPU-ucode vim nvim --noconfirm --needed
 
 echo "Creating fstab ...." 
 genfstab -U /mnt >> /mnt/etc/fstab
