@@ -53,10 +53,10 @@ swapon /dev/$SWAP
 mkfs.ext4 /dev/$MAIN
 
 echo -e "\n Mounting .... \n"
-mount $MAIN /mnt
+mount /dev/$MAIN /mnt
 efidir="boot/efi"
 mkdir /mnt/$efidir
-mount $EFI /mnt/$efidir
+mount /dev/$EFI /mnt/$efidir
 
 
 echo "--------------------------------------"
