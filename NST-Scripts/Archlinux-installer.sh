@@ -68,7 +68,7 @@ pacstrap /mnt linux linux-firmware base base-deve $CPU-ucode vim nvim --noconfir
 echo "Creating fstab ...." 
 genfstab -U /mnt >> /mnt/etc/fstab
 
-cat <<STEP2 > /mnt/Step2.sh
+cat <<REALEND > /mnt/Step2.sh
 
 echo "----------------------------"
 echo "---- Setting timezone ----"
@@ -126,22 +126,22 @@ for IMPTDEB in "${IMPTDEB[@]}"; do
     echo "Successfully installed: $IMPTDEB"
 done
 
-echo -e "\n What do you want to install ? \n"
-
-read DEBN
-
-while [[ true ]]; do
- pacman -S $DEBN
-if [ $? -eq 0 ]; then
-  sleep 3
-    break
-else
-  
-    sleep 3
-    echo "check the spelling and try again"
-fi
- 
-done
+# echo -e "\n What do you want to install ? \n"
+#
+# read DEBN
+#
+# while [[ true ]]; do
+#  pacman -S $DEBN
+# if [ $? -eq 0 ]; then
+#   sleep 3
+#     break
+# else
+#   
+#     sleep 3
+#     echo "check the spelling and try again"
+# fi
+#  
+# done
 
 echo "Do you want to install graphic driver (y/n)"
 read GDA
@@ -226,7 +226,7 @@ echo "-------------------------------------------------"
 echo "Install Complete, You can reboot now"
 echo "-------------------------------------------------"
 
-STEP2
+REALEND
 
 arch-chroot /mnt sh Step2.sh
 
