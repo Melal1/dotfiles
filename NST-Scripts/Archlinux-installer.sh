@@ -44,8 +44,9 @@ read RPASSWORD
 
 echo " enter your password"
 read PASSWORD 
-
+echo "-------------------------------------"
 echo -e "\nParitioning ...\n"
+echo "-------------------------------------"
 mkfs.vfat -F32 /dev/$EFI
 mkswap /dev/$SWAP
 swapon /dev/$SWAP
