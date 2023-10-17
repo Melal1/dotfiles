@@ -143,6 +143,8 @@ done
 #  
 # done
 
+
+
 while true; do
   echo "Do you want to install a graphics driver (y/n)"
   read GDA
@@ -173,6 +175,7 @@ while true; do
         ;;
       *)
         echo "You didn't select a valid value, please try again..."
+        continue  # This allows the user to try again
         ;;
     esac
   elif [[ "$GDA" == "n" ]]; then
