@@ -38,7 +38,7 @@ echo -e "\n Mounting .... \n"
 sleep 1
 mount /dev/$MAIN /mnt
 efidir="boot/efi"
-mkdir /mnt/$efidir
+mkdir -p /mnt/$efidir
 mount /dev/$EFI /mnt/$efidir
 
 sleep 1
