@@ -2,11 +2,34 @@
 # Melal's arch linux installer >><<
 
 
+echo -ne "
+-------------------------------------------------------------------------
+                    Automated Arch Linux Installer
+-------------------------------------------------------------------------
+
+Setting up mirrors for optimal download
+"
+source $CONFIGS_DIR/setup.conf
+iso=$(curl -4 ifconfig.co/country-iso)
+timedatectl set-ntp true
+pacman -S --noconfirm archlinux-keyring #update keyrings to latest to prevent packages failing to install
+pacman -S --noconfirm --needed pacman-contrib terminus-font
+setfont ter-v22b
+sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
+pacman -S --noconfirm --needed reflector rsync grub
+cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+echo -ne "
+-------------------------------------------------------------------------
+                    Setting up $iso mirrors for faster downloads
+-------------------------------------------------------------------------
+"
+reflector -a 48 -c $iso -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
+mkdir /mnt &>/dev/null # Hiding error message if any
 
 
 echo note that you need to partition your disk before running this script 
 
-sleep 2 
+ 
 
 echo " enter EFI paritition: (ex: sda1 )"
 read EFI
@@ -28,18 +51,20 @@ read PASSWORD
 echo "-------------------------------------"
 echo -e "\nParitioning ...\n"
 echo "-------------------------------------"
-mkfs.vfat -F32 /dev/$EFI
-mkswap /dev/$SWAP
-swapon /dev/$SWAP
-mkfs.ext4 /dev/$MAIN
+
+mkfs.vfat -F32 /dev/"${EFI}"
+mkswap /dev/"${SWAP}"
+swapon /dev/"${SWAP}"
+mkfs.ext4 /dev/"${MAIN}"
 
 sleep 1
 echo -e "\n Mounting .... \n"
 sleep 1
-mount /dev/$MAIN /mnt
+mount /dev/"${MAIN}" /mnt
 efidir="boot/efi"
-mkdir -p /mnt/$efidir
-mount /dev/$EFI /mnt/$efidir
+mkdir /mnt/boot
+mkdir /mnt/boot/efi
+mount /dev/"${EFI}" /mnt/"${efidir}"
 
 sleep 1
 echo "--------------------------------------"
@@ -47,7 +72,7 @@ echo "-- Installing Arch Base --"
 echo "--------------------------------------"
 sleep 1
 
-pacstrap /mnt linux linux-firmware base base-devel $CPU-ucode vim  --noconfirm --needed
+pacstrap /mnt linux linux-firmware base base-devel "${CPU}"-ucode vim  --noconfirm --needed
 
 echo "Creating fstab ...." 
 genfstab -U /mnt >> /mnt/etc/fstab
