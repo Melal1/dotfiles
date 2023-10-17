@@ -143,38 +143,43 @@ done
 #  
 # done
 
-echo "Do you want to install a graphics driver (y/n)"
-read GDA
-
 while true; do
+  echo "Do you want to install a graphics driver (y/n)"
+  read GDA
+
   if [[ "$GDA" == "y" ]]; then
     echo "Nvidia, AMD, INTEL, VM (1/2/3/4)"
     read GDA1
-    if [[ "$GDA1" == "1" ]]; then
-      pacman -S nvidia nvidia-utils
-      mkinit="nvidia"
-      break
-    elif [[ "$GDA1" == "2" ]]; then
-      pacman -S xf86-video-amd
-      mkinit="amd"
-      break
-    elif [[ "$GDA1" == "3" ]]; then
-      pacman -S xf86-video-intel
-      mkinit="intel"
-      break
-    elif [[ "$GDA1" == "4" ]]; then
-      grubcfg="true" # for future #TODO
-      break
-    else
-      echo "You didn't select a valid value, Skipping ..."
-      break
-    fi
+
+    case "$GDA1" in
+      "1")
+        pacman -S nvidia nvidia-utils
+        mkinit="nvidia"
+        break
+        ;;
+      "2")
+        pacman -S xf86-video-amd
+        mkinit="amd"
+        break
+        ;;
+      "3")
+        pacman -S xf86-video-intel
+        mkinit="intel"
+        break
+        ;;
+      "4")
+        grubcfg="true" # for future #TODO
+        break
+        ;;
+      *)
+        echo "You didn't select a valid value, please try again..."
+        ;;
+    esac
   elif [[ "$GDA" == "n" ]]; then
-    echo "Okay, Skipping ..."
+    echo "Okay, Skipping..."
     break
   else
     echo "Please select (y/n)"
-    read GDA
   fi
 done
 
