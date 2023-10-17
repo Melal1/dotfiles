@@ -8,25 +8,6 @@ echo note that you need to partition your disk before running this script
 
 sleep 2 
 
-while [[ true ]]; do
-  echo "Your Cpu Model"
-  # echo "1-AMD 2-INTEL 3-none"
-  echo "1-AMD 2-INTEL "
-  read CPU
-  if [[ $CPU == "1" ]]; then
-        CPU=amd
-        break 
-    elif [[ $CPU == "2" ]]; then
-        CPU=intel
-        break 
-    # elif [[ ${CPU}=3 ]]; then
-       # UCODE="0" 
-    else
-      echo "Please choose a number (1/2)"
-      
-    
-  fi
-done
 echo " enter EFI paritition: (ex: sda1 )"
 read EFI
 
@@ -52,21 +33,88 @@ mkswap /dev/$SWAP
 swapon /dev/$SWAP
 mkfs.ext4 /dev/$MAIN
 
+sleep 1
 echo -e "\n Mounting .... \n"
+sleep 1
 mount /dev/$MAIN /mnt
 efidir="boot/efi"
 mkdir /mnt/$efidir
 mount /dev/$EFI /mnt/$efidir
 
-
+sleep 1
 echo "--------------------------------------"
 echo "-- Installing Arch Base --"
 echo "--------------------------------------"
+sleep 1
 
 pacstrap /mnt linux linux-firmware base base-devel $CPU-ucode vim  --noconfirm --needed
 
 echo "Creating fstab ...." 
 genfstab -U /mnt >> /mnt/etc/fstab
+
+while [[ true ]]; do
+  echo "Your Cpu Model"
+  # echo "1-AMD 2-INTEL 3-none"
+  echo "1-AMD 2-INTEL "
+  read CPU
+  if [[ $CPU == "1" ]]; then
+        CPU=amd
+        break 
+    elif [[ $CPU == "2" ]]; then
+        CPU=intel
+        break 
+    # elif [[ ${CPU}=3 ]]; then
+       # UCODE="0" 
+    else
+      echo "Please choose a number (1/2)"
+      
+    
+  fi
+done
+
+
+while true; do
+  echo "Do you want to install a graphics driver (y/n)"
+  read GDA
+
+  if [[ $GDA == "y" ]]; then
+    echo "Nvidia, AMD, INTEL, VM (1/2/3/4)"
+    read GDA1
+
+    case $GDA1 in
+      "1")
+        # pacman -S nvidia nvidia-utils
+        mkinit="nvidia"
+        break
+        ;;
+      "2")
+        # pacman -S xf86-video-amd
+        mkinit="amd"
+        break
+        ;;
+      "3")
+        # pacman -S xf86-video-intel
+        mkinit="intel"
+        break
+        ;;
+      "4")
+        # grubcfg="true" # for future #TODO
+        mkinit="VM"
+        break
+        ;;
+      *)
+        echo "You didn't select a valid value, please try again..."
+        continue  # This allows the user to try again
+        ;;
+    esac
+  elif [[ $GDA == "n" ]]; then
+    echo "Okay, Skipping..."
+    break
+  else
+    echo "Please select (y/n)"
+  fi
+done
+
 
 cat <<REALEND > /mnt/Step2.sh
 
@@ -124,6 +172,7 @@ pacman -S $IMPTDEB
 
 for IMPTDEB in "${IMPTDEB[@]}"; do
     echo "Successfully installed: $IMPTDEB"
+    sleep 1
 done
 
 # echo -e "\n What do you want to install ? \n"
@@ -145,65 +194,31 @@ done
 
 
 
-while true; do
-  echo "Do you want to install a graphics driver (y/n)"
-  read GDA
-
-  if [[ "$GDA" == "y" ]]; then
-    echo "Nvidia, AMD, INTEL, VM (1/2/3/4)"
-    read GDA1
-
-    case "$GDA1" in
-      "1")
-        pacman -S nvidia nvidia-utils
-        mkinit="nvidia"
-        break
-        ;;
-      "2")
-        pacman -S xf86-video-amd
-        mkinit="amd"
-        break
-        ;;
-      "3")
-        pacman -S xf86-video-intel
-        mkinit="intel"
-        break
-        ;;
-      "4")
-        grubcfg="true" # for future #TODO
-        break
-        ;;
-      *)
-        echo "You didn't select a valid value, please try again..."
-        continue  # This allows the user to try again
-        ;;
-    esac
-  elif [[ "$GDA" == "n" ]]; then
-    echo "Okay, Skipping..."
-    break
-  else
-    echo "Please select (y/n)"
-  fi
-done
 
 echo "----------------------------"
 echo "---- Mkinitcpio ----"
 echo "----------------------------"
 
 if [[ "$mkinit"" == "amd" ]]; then
-  
+
+  pacman -S xf86-video-amd
   sed -i 's/^MODULES=()/MODULES=(amdgpu)/' /etc/mkinitcpio.conf
   mkinitcpio -p linux
+
   elif [[ "$mkinit" == "nvidia" ]]; then
-    
+
+  pacman -S nvidia nvidia-utils 
   sed -i 's/^MODULES=()/MODULES=(nvidia)/' /etc/mkinitcpio.conf
 
   mkinitcpio -p linux
+
 elif [[ "$mkinit" == "intel" ]]; then
-  
+
+  pacman -S xf86-video-intel
   sed -i 's/^MODULES=()/MODULES=(i915)/' /etc/mkinitcpio.conf
 
   mkinitcpio -p linux
+
   else
     echo "Skipping .... "
 
