@@ -94,7 +94,7 @@ read HOSTNAME
 
 echo "$HOSTNAME" >> /etc/hostname
 
-cat<<END > /etc/hosts
+cat <<END > /etc/hosts
 
 127.0.0.1   localhost
 ::1         localhost
@@ -148,23 +148,23 @@ read GDA
 
 while [[ true ]]; do
   
-if [[ $GDA == "y" ]]; then
+if [[ "$GDA" == "y" ]]; then
   echo "Nvidia , AMD , INTEL , VM   (1/2/3/4)"
   read GDA1 
-  if [[  $GDA1 == "1" ]]; then
+  if [[  "$GDA1" == "1" ]]; then
     pacman -S nvidia nvidia-utils
     mkinit="nvidia"
     break 
-    elif [[ $GDA1 == "2" ]]; then
+    elif [[ "$GDA1" == "2" ]]; then
       pacman -S xf86-video-amd
       mkinit="amd"
       break 
-    elif [[ $GDA1 == "3" ]]; then
+    elif [[ "$GDA1" == "3" ]]; then
       
       pacman -S xf86-video-intel
       mkinit="intel"
       break 
-      elif [[ $GDA1 == "4" ]]; then
+      elif [[ "$GDA1" == "4" ]]; then
         
         grubcfg="true" # for future #TODO
         break 
@@ -175,7 +175,7 @@ if [[ $GDA == "y" ]]; then
         break 
 
   fi
-  elif [[ $GDA == "n" ]]; then
+  elif [[ "$GDA" == "n" ]]; then
     echo "okay , Skipping .."
 
     break 
