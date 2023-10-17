@@ -189,16 +189,16 @@ echo "----------------------------"
 echo "---- Mkinitcpio ----"
 echo "----------------------------"
 
-if [[ $mkinit == "amd" ]]; then
+if [[ "$mkinit"" == "amd" ]]; then
   
   sed -i 's/^MODULES=()/MODULES=(amdgpu)/' /etc/mkinitcpio.conf
   mkinitcpio -p linux
-  elif [[ $mkinit == "nvidia" ]]; then
+  elif [[ "$mkinit" == "nvidia" ]]; then
     
   sed -i 's/^MODULES=()/MODULES=(nvidia)/' /etc/mkinitcpio.conf
 
   mkinitcpio -p linux
-elif [[ $mkinit == "intel" ]]; then
+elif [[ "$mkinit" == "intel" ]]; then
   
   sed -i 's/^MODULES=()/MODULES=(i915)/' /etc/mkinitcpio.conf
 
