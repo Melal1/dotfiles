@@ -1,10 +1,27 @@
 #!/bin/bash
-# Melal's arch linux installer >><<
-
-
 echo -ne "
 -------------------------------------------------------------------------
-                    Automated Arch Linux Installer
+
+  ▄▄▄▄███▄▄▄▄      ▄████████  ▄█          ▄████████  ▄█      
+▄██▀▀▀███▀▀▀██▄   ███    ███ ███         ███    ███ ███      
+███   ███   ███   ███    █▀  ███         ███    ███ ███      
+███   ███   ███  ▄███▄▄▄     ███         ███    ███ ███      
+███   ███   ███ ▀▀███▀▀▀     ███       ▀███████████ ███      
+███   ███   ███   ███    █▄  ███         ███    ███ ███      
+███   ███   ███   ███    ███ ███▌    ▄   ███    ███ ███▌    ▄
+ ▀█   ███   █▀    ██████████ █████▄▄██   ███    █▀  █████▄▄██
+                             ▀                      ▀        
+-------------------------------------------------------------------------
+"
+
+
+
+# from christitus script 
+echo -ne "
+-------------------------------------------------------------------------
+                    ArchLinux Installer
+                    NOTE : you need to partition
+                    your disk before run this script 
 -------------------------------------------------------------------------
 
 Setting up mirrors for optimal download
@@ -26,268 +43,182 @@ echo -ne "
 reflector -a 48 -c $iso -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
 mkdir /mnt &>/dev/null # Hiding error message if any
 
+echo -ne "
+-------------------------------------------------------------------------
+                     Create file system
+-------------------------------------------------------------------------
+"
 
-echo note that you need to partition your disk before running this script 
 
- 
+read -r -p "Enter the efi partition (Ex: sda1) : " EFI
+mkfs.vfat -F32 -n "EFI" /dev/"$EFI"
+echo -ne "\n"
 
-echo " enter EFI paritition: (ex: sda1 )"
-read EFI
+read -r -p "Enter the swap partition : " SWAP
+mkswap /dev/"$SWAP"
+swapon /dev/"$SWAP"
+echo -ne "\n"
 
-echo " enter SWAP paritition: "
-read SWAP
+read -r -p "Enter the root(/) partition : " MAIN
+mkfs.ext4 -L "root" /dev/"$MAIN"
 
-echo " enter main(/) paritition: "
-read MAIN 
+echo -ne "
+-------------------------------------------------------------------------
+                    Mounting
+-------------------------------------------------------------------------
+"
+mount /dev/"$EFI" /mnt
+boot="boot/efi"
+mkdir -p /mnt/"$boot"
+mount /dev/"$EFI" /mnt/"$boot"
+echo -ne "\n"
+echo -ne "
+-------------------------------------------------------------------------
 
-echo " enter your username"
-read USER 
+  ▄▄▄▄███▄▄▄▄      ▄████████  ▄█          ▄████████  ▄█      
+▄██▀▀▀███▀▀▀██▄   ███    ███ ███         ███    ███ ███      
+███   ███   ███   ███    █▀  ███         ███    ███ ███      
+███   ███   ███  ▄███▄▄▄     ███         ███    ███ ███      
+███   ███   ███ ▀▀███▀▀▀     ███       ▀███████████ ███      
+███   ███   ███   ███    █▄  ███         ███    ███ ███      
+███   ███   ███   ███    ███ ███▌    ▄   ███    ███ ███▌    ▄
+ ▀█   ███   █▀    ██████████ █████▄▄██   ███    █▀  █████▄▄██
+                             ▀                      ▀        
+-------------------------------------------------------------------------
+          Please select presetup settings for your system
+-------------------------------------------------------------------------
+"
 
-echo "Enter your root password"
-read RPASSWORD
 
-echo " enter your password"
-read PASSWORD 
-echo "-------------------------------------"
-echo -e "\nParitioning ...\n"
-echo "-------------------------------------"
 
-mkfs.vfat -F32 /dev/"${EFI}"
-mkswap /dev/"${SWAP}"
-swapon /dev/"${SWAP}"
-mkfs.ext4 /dev/"${MAIN}"
+while true
+ do 
+		read -p "Enter username : " USER1
+		# username regex per response here https://unix.stackexchange.com/questions/157426/what-is-the-regex-to-validate-linux-users
+		# lowercase the username to test regex
+		if [[ "${USER1}" =~ ^[a-z_]([a-z0-9_-]{0,31}|[a-z0-9_-]{0,30}\$)$ ]] ; then
+		  user="${USER1,,}"
+			break
+     else 
+		 echo "Incorrect username , check that username complies with username rules"
+    fi
+done 
 
-sleep 1
-echo -e "\n Mounting .... \n"
-sleep 1
-mount /dev/"${MAIN}" /mnt
-efidir="boot/efi"
-mkdir /mnt/boot
-mkdir /mnt/boot/efi
-mount /dev/"${EFI}" /mnt/"${efidir}"
 
-sleep 1
-echo "--------------------------------------"
-echo "-- Installing Arch Base --"
-echo "--------------------------------------"
-sleep 1
+read -r -p "Enter hostname : " HOSTNAME
+echo -ne "\n"
 
-while [[ true ]]; do
-  echo "Your Cpu Model"
-  # echo "1-AMD 2-INTEL 3-none"
-  echo "1-AMD 2-INTEL "
-  read CPU
-  if [[ $CPU == "1" ]]; then
-        CPU=amd
-        break 
-    elif [[ $CPU == "2" ]]; then
-        CPU=intel
-        break 
-    # elif [[ ${CPU}=3 ]]; then
-       # UCODE="0" 
-    else
-      echo "Please choose a number (1/2)"
-      
+sec_password() {
+  read -r -p "Enter your password : " PASS1
+  echo -ne "\n"
+  read -r -p "Re-enter your password : " PASS2
+  if [[ "$PASS1" == "$PASS2" ]] ; then 
+      PASS="$PASS1"
+   else
+    echo -ne "- ERROR !! - Passwords don't match . \n"
+     sec_password
+  fi
+}
+
+sec_password
+
+
+echo -ne "
+-------------------------------------------------------------------------
+                    Determine Microcode
+-------------------------------------------------------------------------
+"
+# determine processor type and install microcode
+cpu_type=$(lscpu)
+if grep -E "GenuineIntel" <<< ${cpu_type}; then
+    echo "Installing Intel microcode"
+    CPU="intel"
     
-  fi
-done
+elif grep -E "AuthenticAMD" <<< ${cpu_type}; then
+    echo "Installing AMD microcode"
+    CPU="amd"
+    
+fi
 
 
-while true; do
-  echo "Do you want to install a graphics driver (y/n)"
-  read GDA
 
-  if [[ $GDA == "y" ]]; then
-    echo "Nvidia, AMD, INTEL, VM (1/2/3/4)"
-    read GDA1
+echo -ne "
+-------------------------------------------------------------------------
+                    Determine Graphics Drivers
+-------------------------------------------------------------------------
+"
 
-    case $GDA1 in
-      "1")
-        # pacman -S nvidia nvidia-utils
-        mkinit="nvidia"
-        break
-        ;;
-      "2")
-        # pacman -S xf86-video-amd
-        mkinit="amd"
-        break
-        ;;
-      "3")
-        # pacman -S xf86-video-intel
-        mkinit="intel"
-        break
-        ;;
-      "4")
-        # grubcfg="true" # for future #TODO
-        mkinit="VM"
-        break
-        ;;
-      *)
-        echo "You didn't select a valid value, please try again..."
-        continue  # This allows the user to try again
-        ;;
-    esac
-  elif [[ $GDA == "n" ]]; then
-    echo "Okay, Skipping..."
-    break
-  else
-    echo "Please select (y/n)"
-  fi
-done
+sec_vm() {
+read -r -p "Are you on virtual machine ? (y/n) : " VM
+if [[ "$VM" == "y" ]] ; then 
+    echo -ne "Skipping ..."
+    sleep 1
+  elif [[ "$VM" == "n" ]]; then 
+      gpu_type=$(lspci)
+      if grep -E "NVIDIA|GeForce" <<< ${gpu_type}; then
+          # pacman -S --noconfirm --needed nvidia
+          GPU="NVIDIA"
+        elif lspci | grep 'VGA' | grep -E "Radeon|AMD"; then
+          # pacman -S --noconfirm --needed xf86-video-amdgpu
+          GPU="AMD"
+        elif grep -E "Integrated Graphics Controller" <<< ${gpu_type}; then
+        # pacman -S --noconfirm --needed libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
+          GPU="INTEL-IN"
+        elif grep -E "Intel Corporation UHD" <<< ${gpu_type}; then
+        # pacman -S --needed --noconfirm libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
+          GPU="INTEL-EX"
+        else
+          echo "Please choose (y/n)"
+          sec_vm
+       fi
+fi
+}
+sec_vm
+
+
+echo -ne "
+-------------------------------------------------------------------------
+                        Installing Arch Base
+-------------------------------------------------------------------------
+"
 
 pacstrap /mnt linux linux-firmware base base-devel "${CPU}"-ucode vim  --noconfirm --needed
 
-echo "Creating fstab ...." 
-genfstab -U /mnt >> /mnt/etc/fstab
+
+echo -ne "
+-------------------------------------------------------------------------
+                          Create fstab
+-------------------------------------------------------------------------
+"
+
+genfstab -u /mnt >> /mnt/etc/fstab
 
 
+echo -ne "
+-------------------------------------------------------------------------
+                   Your SYSTEM is Ready for 2-Setup
+-------------------------------------------------------------------------
+"
 
-cat <<REALEND > /mnt/Step2.sh
+cat <<REALEND > /mnt/2-Setup.sh
 
-echo "----------------------------"
-echo "---- Setting timezone ----"
-echo "----------------------------"
+echo -ne "
+-------------------------------------------------------------------------
 
-
-ln -sf /usr/share/zoneinfo/Asia/Kuwait /etc/localtime 
-hwclock --systohc 
-
-
-echo "----------------------------"
-echo "---- Locale ----"
-echo "----------------------------"
-
-sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
-sed -i 's/^#ar_SA.UTF-8 UTF-8/ar_SA.UTF-8 UTF-8/' /etc/locale.gen
-locale-gen
-
-echo "LANG=en_US.UTF-8"
-
-echo " Enter the host name"
-read HOSTNAME
-
-echo "$HOSTNAME" >> /etc/hostname
-
-cat <<END > /etc/hosts
-
-127.0.0.1   localhost
-::1         localhost
-127.0.1.1   $HOSTNAME.localdomain   $HOSTNAME
-END
-
-echo "----------------------------"
-echo "---- Adding User .... ----"
-echo "----------------------------"
-
-useradd -mG wheel $USER
-echo $USER:$PASSWORD
-sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
-
-echo "----------------------------"
-echo "---- Password .... ----"
-echo "----------------------------"
-
-echo root:$RPASSWORD | chpasswd
-
-echo "----------------------------"
-echo "---- Setup Dependencies ----"
-echo "----------------------------"
-
-IMPTDEB= "grub efibootmgr networkmanager network-manager-applet git"
-pacman -S $IMPTDEB 
-
-for IMPTDEB in "${IMPTDEB[@]}"; do
-    echo "Successfully installed: $IMPTDEB"
-    sleep 1
-done
-
-# echo -e "\n What do you want to install ? \n"
-#
-# read DEBN
-#
-# while [[ true ]]; do
-#  pacman -S $DEBN
-# if [ $? -eq 0 ]; then
-#   sleep 3
-#     break
-# else
-#   
-#     sleep 3
-#     echo "check the spelling and try again"
-# fi
-#  
-# done
-
-
-
-
-echo "----------------------------"
-echo "---- Mkinitcpio ----"
-echo "----------------------------"
-
-if [[ "$mkinit" == "amd" ]]; then
-
-  pacman -S xf86-video-amd
-  sed -i 's/^MODULES=()/MODULES=(amdgpu)/' /etc/mkinitcpio.conf
-  mkinitcpio -p linux
-
-  elif [[ "$mkinit" == "nvidia" ]]; then
-
-  pacman -S nvidia nvidia-utils 
-  sed -i 's/^MODULES=()/MODULES=(nvidia)/' /etc/mkinitcpio.conf
-
-  mkinitcpio -p linux
-
-elif [[ "$mkinit" == "intel" ]]; then
-
-  pacman -S xf86-video-intel
-  sed -i 's/^MODULES=()/MODULES=(i915)/' /etc/mkinitcpio.conf
-
-  mkinitcpio -p linux
-
-  else
-    echo "Skipping .... "
-
-
-fi
-
-echo "----------------------------"
-echo "---- Bootloader install (Grub) ----"
-echo "----------------------------"
-
-grub-install --target=x86_64-efi --efi-directory=$efidir --bootloader-id=GRUB
-grub-mkconfig -o /boot/grub/grub.cfg
-  
-echo "----------------------------"
-echo "---- Services enable ----"
-echo "----------------------------"
-
-systemctl enable networkmanager
-
-echo "-------------------------------------------------"
-echo "Install Complete, You can reboot now"
-echo "-------------------------------------------------"
+  ▄▄▄▄███▄▄▄▄      ▄████████  ▄█          ▄████████  ▄█      
+▄██▀▀▀███▀▀▀██▄   ███    ███ ███         ███    ███ ███      
+███   ███   ███   ███    █▀  ███         ███    ███ ███      
+███   ███   ███  ▄███▄▄▄     ███         ███    ███ ███      
+███   ███   ███ ▀▀███▀▀▀     ███       ▀███████████ ███      
+███   ███   ███   ███    █▄  ███         ███    ███ ███      
+███   ███   ███   ███    ███ ███▌    ▄   ███    ███ ███▌    ▄
+ ▀█   ███   █▀    ██████████ █████▄▄██   ███    █▀  █████▄▄██
+                             ▀                      ▀        
+-------------------------------------------------------------------------
+                             2-Setup
+-------------------------------------------------------------------------
+"
 
 REALEND
 
-arch-chroot /mnt sh Step2.sh
-
-
-#1- partitioning the drive 
-# tools : cfdisk -- 3 or 2 ( linux file system , Efi)
-#
-#2- mounting partitions 
-# step 1 : mount /dev/-the system partition - /mnt
-# step 2 : create a boot dir inside the /mnt -> mkdir -p /mnt/boot/efi
-# step 3 : mount /dev/- the efi partition - /mnt/boot/efi
-
-
-# 3- install the system 
-# pacstrap /mnt base linux linux-firware vim amd-ucode git 
-# 4- genfstab -U /mnt >> /mnt/etc/fstab
-
-# 5 - arch-chroot /mnt
-
-
-# --- setting the time zone --- 
-#  To see all available timezones 
+arch-chroot /mnt sh 2-Setup.sh
