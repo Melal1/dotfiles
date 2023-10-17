@@ -14,7 +14,7 @@ iso=$(curl -4 ifconfig.co/country-iso)
 timedatectl set-ntp true
 pacman -S --noconfirm archlinux-keyring #update keyrings to latest to prevent packages failing to install
 pacman -S --noconfirm --needed pacman-contrib terminus-font
-setfont ter-v22b
+# setfont ter-v22b
 sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
 pacman -S --noconfirm --needed reflector rsync grub
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
@@ -71,11 +71,6 @@ echo "--------------------------------------"
 echo "-- Installing Arch Base --"
 echo "--------------------------------------"
 sleep 1
-
-pacstrap /mnt linux linux-firmware base base-devel "${CPU}"-ucode vim  --noconfirm --needed
-
-echo "Creating fstab ...." 
-genfstab -U /mnt >> /mnt/etc/fstab
 
 while [[ true ]]; do
   echo "Your Cpu Model"
@@ -140,6 +135,12 @@ while true; do
   fi
 done
 
+pacstrap /mnt linux linux-firmware base base-devel "${CPU}"-ucode vim  --noconfirm --needed
+
+echo "Creating fstab ...." 
+genfstab -U /mnt >> /mnt/etc/fstab
+
+
 
 cat <<REALEND > /mnt/Step2.sh
 
@@ -192,7 +193,7 @@ echo "----------------------------"
 echo "---- Setup Dependencies ----"
 echo "----------------------------"
 
-IMPTDEB=grub efibootmgr networkmanager network-manager-applet git
+IMPTDEB= "grub efibootmgr networkmanager network-manager-applet git"
 pacman -S $IMPTDEB 
 
 for IMPTDEB in "${IMPTDEB[@]}"; do
@@ -224,7 +225,7 @@ echo "----------------------------"
 echo "---- Mkinitcpio ----"
 echo "----------------------------"
 
-if [[ "$mkinit"" == "amd" ]]; then
+if [[ "$mkinit" == "amd" ]]; then
 
   pacman -S xf86-video-amd
   sed -i 's/^MODULES=()/MODULES=(amdgpu)/' /etc/mkinitcpio.conf
