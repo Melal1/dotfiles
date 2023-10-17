@@ -143,47 +143,47 @@ done
 #  
 # done
 
-echo "Do you want to install graphic driver (y/n)"
+echo "Do you want to install a graphics driver (y/n)"
 read GDA
 
-while [[ true ]]; do
-  
-if [[ "$GDA" == "y" ]]; then
-  echo "Nvidia , AMD , INTEL , VM   (1/2/3/4)"
-  read GDA1 
-  if [[  "$GDA1" == "1" ]]; then
-    pacman -S nvidia nvidia-utils
-    mkinit="nvidia"
-    break 
-    elif [[ "$GDA1" == "2" ]]; then
-      pacman -S xf86-video-amd
-      mkinit="amd"
-      break 
-    elif [[ "$GDA1" == "3" ]]; then
-      
-      pacman -S xf86-video-intel
-      mkinit="intel"
-      break 
-      elif [[ "$GDA1" == "4" ]]; then
-        
+while true; do
+  if [[ "$GDA" == "y" ]]; then
+    echo "Nvidia, AMD, INTEL, VM (1/2/3/4)"
+    read GDA1
+    case "$GDA1" in
+      "1")
+        pacman -S nvidia nvidia-utils
+        mkinit="nvidia"
+        break
+        ;;
+      "2")
+        pacman -S xf86-video-amd
+        mkinit="amd"
+        break
+        ;;
+      "3")
+        pacman -S xf86-video-intel
+        mkinit="intel"
+        break
+        ;;
+      "4")
         grubcfg="true" # for future #TODO
-        break 
-        
-      else
-
-        echo "you didn't select a valid value , Skipping ..."
-        break 
-
-  fi
+        break
+        ;;
+      *)
+        echo "You didn't select a valid value, Skipping ..."
+        break
+        ;;
+    esac
   elif [[ "$GDA" == "n" ]]; then
-    echo "okay , Skipping .."
-
-    break 
+    echo "Okay, Skipping ..."
+    break
   else
     echo "Please select (y/n)"
-    
-fi
+    read GDA
+  fi
 done
+
 
 echo "----------------------------"
 echo "---- Mkinitcpio ----"
