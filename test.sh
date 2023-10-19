@@ -1,43 +1,37 @@
 
-echo "Do you want to install graphic driver (y/n)"
-read GDA
+timezone=$(curl --fail https://ipapi.co/timezone)
+echo -ne "------------------------------------------------------------------------------------------ \n"
 
-while [[ true ]]; do
+timezone () {
+echo -ne "\n Your timezone is '$timezone' , is that right ? (y/n) : \n"
+read -r timezone_answer 
+
+if [[ "$timezone_answer" == "y" ]] ; then
+  echo -ne "Setting your time zone to '$timezone' "
+  # ln -sf /usr/share/zoneinfo/"$timezone" /etc/localtime 
+
+  elif [[ "$timezone_answer" == "n" ]]; then
   
-if [[ $GDA == "y" ]]; then
-  echo "Nvidia , AMD , INTEL , VM   (1/2/3/4)"
-  read GDA1 
-  if [[  $GDA1 == "1" ]]; then
-    pacman -Ss nvidia nvidia-utils
-    mkinit="nvidia"
-    break 
-    elif [[ $GDA1 == "2" ]]; then
-      pacman -Ss xf86-video-amd
-      mkinit="amd"
-      break 
-    elif [[ $GDA1 == "3" ]]; then
-      
-      pacman -Ss xf86-video-intel
-      mkinit="intel"
-      break 
-      elif [[ $GDA1 == "4" ]]; then
-        
-        grubcfg="true" # for future #TODO
-        break 
-        
+  sure () {
+    echo -ne "Please write your time zone ( Ex: Asia/Kuwait ) : \n"
+    read -r TIMEZONE 
+
+    echo -ne "Your timezone will be set to '$TIMEZONE' \n Continue ? (y/n) : \n"
+    read -r continue
+
+    if [[ "${continue}" == "y" ]]; then
+      echo -ne "Setting your timezone to $TIMEZONE"
+      # ln -sf /usr/share/zoneinfo/"$TIMEZONE" /etc/localtime
       else
+        sure
+    fi
 
-        echo "you didn't select a valid value , Skipping ..."
-        break 
+  }
 
-  fi
-  elif [[ $GDA == "n" ]]; then
-    echo "okay , Skipping .."
-
-    break 
+    sure
   else
-    echo "Please select (y/n)"
-    
-fi
-done
-echo $mkinit
+    echo -ne "\n Please select (y/n) \n"
+    timezone
+fi 
+}
+timezone
