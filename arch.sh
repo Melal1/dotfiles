@@ -15,7 +15,6 @@ echo -ne "
 "
 
 
-
 # from christitus script 
 echo -ne "
 -------------------------------------------------------------------------
@@ -246,7 +245,7 @@ if [[ "$timezone_answer" == "y" ]] ; then
 
   elif [[ "$timezone_answer" == "n" ]]; then
   
-  sure () {
+  sure() {
     echo -ne "Please write your time zone ( Ex: Asia/Kuwait ) : \n"
     read -r TIMEZONE 
 
@@ -269,6 +268,126 @@ if [[ "$timezone_answer" == "y" ]] ; then
 fi 
 }
 timezone
+
+echo -ne "
+-------------------------------------------------------------------------
+                          Setting Locale 
+-------------------------------------------------------------------------
+"
+
+sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+sed -i 's/^#ar_SA.UTF-8 UTF-8/ar_SA.UTF-8 UTF-8/' /etc/locale.gen
+locale-gen
+
+echo "LANG=en_US.UTF-8" >> 
+
+echo -ne " Enter the host name : \n"
+read HOSTNAME
+
+echo "$HOSTNAME" >> /etc/hostname
+
+cat <<END > /etc/hosts
+
+127.0.0.1   localhost
+::1         localhost
+127.0.1.1   $HOSTNAME.localdomain   $HOSTNAME
+END
+
+echo -ne "
+-------------------------------------------------------------------------
+                          Adding User 
+-------------------------------------------------------------------------
+"
+
+groupadd libvirt
+useradd -m -G wheel,libvirt -s /bin/bash $USER
+echo "$USER created, home directory created, added to wheel and libvirt group, default shell set to /bin/bash"
+echo "$USER:$PASS" | chpasswd
+
+# Add sudo no password rights
+sed -i 's/^# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
+sed -i 's/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
+
+
+echo "----------------------------"
+echo "---- Setup Dependencies ----"
+echo "----------------------------"
+
+IMPTDEB=("grub" "efibootmgr" "networkmanager" "network-manager-applet" "git")
+
+pacman -S --noconfirm "${IMPTDEB[@]}"
+
+for IMPTDEB in "${IMPTDEB[@]}"; do
+    echo "Successfully installed: $IMPTDEB"
+    sleep 1
+done
+
+# echo -e "\n What do you want to install ? \n"
+#
+# read DEBN
+#
+# while [[ true ]]; do
+#  pacman -S $DEBN
+# if [ $? -eq 0 ]; then
+#   sleep 3
+#     break
+# else
+#   
+#     sleep 3
+#     echo "check the spelling and try again"
+# fi
+#  
+# done
+
+
+
+
+echo "----------------------------"
+echo "---- Mkinitcpio ----"
+echo "----------------------------"
+
+if [[ "$mkinit" == "amd" ]]; then
+
+  pacman -S xf86-video-amd
+  sed -i 's/^MODULES=()/MODULES=(amdgpu)/' /etc/mkinitcpio.conf
+  mkinitcpio -p linux
+
+  elif [[ "$mkinit" == "nvidia" ]]; then
+
+  pacman -S nvidia nvidia-utils 
+  sed -i 's/^MODULES=()/MODULES=(nvidia)/' /etc/mkinitcpio.conf
+
+  mkinitcpio -p linux
+
+elif [[ "$mkinit" == "intel" ]]; then
+
+  pacman -S xf86-video-intel
+  sed -i 's/^MODULES=()/MODULES=(i915)/' /etc/mkinitcpio.conf
+
+  mkinitcpio -p linux
+
+  else
+    echo "Skipping .... "
+
+
+fi
+
+echo "----------------------------"
+echo "---- Bootloader install (Grub) ----"
+echo "----------------------------"
+
+grub-install --target=x86_64-efi --efi-directory=$efidir --bootloader-id=GRUB
+grub-mkconfig -o /boot/grub/grub.cfg
+  
+echo "----------------------------"
+echo "---- Services enable ----"
+echo "----------------------------"
+
+systemctl enable networkmanager
+
+echo "-------------------------------------------------"
+echo "Install Complete, You can reboot now"
+echo "-------------------------------------
 
 REALEND
 
