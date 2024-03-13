@@ -129,6 +129,47 @@ sec_password() {
 
 sec_password
 
+echo -ne "
+-------------------------------------------------------------------------
+                          Setting timezone 
+-------------------------------------------------------------------------
+"
+
+timezone=$(curl --fail https://ipapi.co/timezone)
+echo -ne "------------------------------------------------------------------------------------------ \n"
+
+timezone () {
+echo -ne "\n Your timezone is '$timezone' , is that right ? (y/n) : \n"
+read -r timezone_answer 
+
+if [[ "$timezone_answer" == "y" ]] ; then
+  echo -ne "Setting your time zone to '$timezone' "
+  # ln -sf /usr/share/zoneinfo/"$timezone" /etc/localtime 
+
+  elif [[ "$timezone_answer" == "n" ]]; then
+  
+  sure() {
+    echo -ne "Please write your time zone ( Ex: Asia/Kuwait ) : \n"
+    read -r TIMEZONE 
+
+    echo -ne "Your timezone will be set to '$TIMEZONE' \n Continue ? (y/n) : \n"
+    read -r continue
+
+    if [[ "${continue}" == "y" ]]; then
+      echo -ne "Setting your timezone to $TIMEZONE"
+      else
+        sure
+    fi
+
+  }
+
+    sure
+  else
+    echo -ne "\n Please select (y/n) \n"
+    timezone
+fi 
+}
+timezone
 
 echo -ne "
 -------------------------------------------------------------------------
@@ -165,15 +206,20 @@ if [[ "$VM" == "y" ]] ; then
       if grep -E "NVIDIA|GeForce" <<< ${gpu_type}; then
           # pacman -S --noconfirm --needed nvidia
           GPU="NVIDIA"
+          GPKG=("nvidia")
         elif lspci | grep 'VGA' | grep -E "Radeon|AMD"; then
           # pacman -S --noconfirm --needed xf86-video-amdgpu
           GPU="AMD"
+          GPKG=("xf86-video-amdgpu")
         elif grep -E "Integrated Graphics Controller" <<< ${gpu_type}; then
         # pacman -S --noconfirm --needed libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
-          GPU="INTEL-IN"
+          GPU="INTEL"        
+          GPKG=("libva-intel-driver" "libvdpau-va-gl" "lib32-vulkan-intel" "vulkan-intel" "libva-intel-driver" "libva-utils" "lib32-mesa")
+
         elif grep -E "Intel Corporation UHD" <<< ${gpu_type}; then
         # pacman -S --needed --noconfirm libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
-          GPU="INTEL-EX"
+          GPU="INTEL"
+          GPKG=("libva-intel-driver" "libvdpau-va-gl" "lib32-vulkan-intel" "vulkan-intel" "libva-intel-driver" "libva-utils" "lib32-mesa")
         else
           echo "Please choose (y/n)"
           sec_vm
@@ -191,6 +237,7 @@ echo -ne "
 
 pacstrap /mnt linux linux-firmware base base-devel "${CPU}"-ucode vim  --noconfirm --needed
 
+IMPTDEB=("grub" "efibootmgr" "networkmanager" "${GPKG[@]}" "git")
 
 echo -ne "
 -------------------------------------------------------------------------
@@ -226,49 +273,7 @@ echo -ne "
                              2-Setup
 -------------------------------------------------------------------------
 "
-echo -ne "
--------------------------------------------------------------------------
-                          Setting timezone 
--------------------------------------------------------------------------
-"
-
-timezone=$(curl --fail https://ipapi.co/timezone)
-echo -ne "------------------------------------------------------------------------------------------ \n"
-
-timezone () {
-echo -ne "\n Your timezone is '$timezone' , is that right ? (y/n) : \n"
-read -r timezone_answer 
-
-if [[ "$timezone_answer" == "y" ]] ; then
-  echo -ne "Setting your time zone to '$timezone' "
-  # ln -sf /usr/share/zoneinfo/"$timezone" /etc/localtime 
-
-  elif [[ "$timezone_answer" == "n" ]]; then
-  
-  sure() {
-    echo -ne "Please write your time zone ( Ex: Asia/Kuwait ) : \n"
-    read -r TIMEZONE 
-
-    echo -ne "Your timezone will be set to '$TIMEZONE' \n Continue ? (y/n) : \n"
-    read -r continue
-
-    if [[ "${continue}" == "y" ]]; then
-      echo -ne "Setting your timezone to $TIMEZONE"
-      # ln -sf /usr/share/zoneinfo/"$TIMEZONE" /etc/localtime
-      else
-        sure
-    fi
-
-  }
-
-    sure
-  else
-    echo -ne "\n Please select (y/n) \n"
-    timezone
-fi 
-}
-timezone
-
+ ln -sf /usr/share/zoneinfo/"$TIMEZONE" /etc/localtime
 echo -ne "
 -------------------------------------------------------------------------
                           Setting Locale 
@@ -302,7 +307,6 @@ echo -ne "
 groupadd libvirt
 useradd -m -G wheel,libvirt -s /bin/bash $USER
 echo "$USER created, home directory created, added to wheel and libvirt group, default shell set to /bin/bash"
-echo "$USER:$PASS" | chpasswd
 
 # Add sudo no password rights
 sed -i 's/^# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
@@ -313,31 +317,10 @@ echo "----------------------------"
 echo "---- Setup Dependencies ----"
 echo "----------------------------"
 
-IMPTDEB=("grub" "efibootmgr" "networkmanager" "network-manager-applet" "git")
 
 pacman -S --noconfirm "${IMPTDEB[@]}"
 
-for IMPTDEB in "${IMPTDEB[@]}"; do
-    echo "Successfully installed: $IMPTDEB"
-    sleep 1
-done
 
-# echo -e "\n What do you want to install ? \n"
-#
-# read DEBN
-#
-# while [[ true ]]; do
-#  pacman -S $DEBN
-# if [ $? -eq 0 ]; then
-#   sleep 3
-#     break
-# else
-#   
-#     sleep 3
-#     echo "check the spelling and try again"
-# fi
-#  
-# done
 
 
 
@@ -346,27 +329,27 @@ echo "----------------------------"
 echo "---- Mkinitcpio ----"
 echo "----------------------------"
 
-if [[ "$mkinit" == "amd" ]]; then
+if [[ "$GPU" == "AMD" ]]; then
 
   pacman -S xf86-video-amd
   sed -i 's/^MODULES=()/MODULES=(amdgpu)/' /etc/mkinitcpio.conf
   mkinitcpio -p linux
 
-  elif [[ "$mkinit" == "nvidia" ]]; then
+  elif [[ "$GPU" == "NVIDIA" ]]; then
 
   pacman -S nvidia nvidia-utils 
   sed -i 's/^MODULES=()/MODULES=(nvidia)/' /etc/mkinitcpio.conf
 
   mkinitcpio -p linux
 
-elif [[ "$mkinit" == "intel" ]]; then
+elif [[ "$GPU" == "INTEL" ]]; then
 
   pacman -S xf86-video-intel
   sed -i 's/^MODULES=()/MODULES=(i915)/' /etc/mkinitcpio.conf
 
   mkinitcpio -p linux
 
-  else
+else
     echo "Skipping .... "
 
 
