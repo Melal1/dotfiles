@@ -236,7 +236,7 @@ echo -ne "
 
 pacstrap /mnt linux linux-firmware base base-devel "${CPU}"-ucode vim  --noconfirm --needed
 
-IMPTDEB=("grub" "efibootmgr" "networkmanager" "${GPKG[@]}" "git")
+PKG=("grub" "efibootmgr" "networkmanager" "${GPKG[@]}" "git")
 
 echo -ne "
 -------------------------------------------------------------------------
@@ -284,8 +284,6 @@ sed -i 's/^#ar_SA.UTF-8 UTF-8/ar_SA.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
 
 
-echo -ne " Enter the host name : \n"
-read HOSTNAME
 
 echo "$HOSTNAME" >> /etc/hostname
 
@@ -316,7 +314,7 @@ echo "---- Setup Dependencies ----"
 echo "----------------------------"
 
 
-pacman -S --noconfirm "${IMPTDEB[@]}"
+pacman -S --noconfirm "${PKG[@]}"
 
 
 
@@ -357,14 +355,14 @@ echo "----------------------------"
 echo "---- Bootloader install (Grub) ----"
 echo "----------------------------"
 
-grub-install --target=x86_64-efi --efi-directory=$efidir --bootloader-id=GRUB
+grub-install --target=x86_64-efi --efi-directory=$boot --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
   
 echo "----------------------------"
 echo "---- Services enable ----"
 echo "----------------------------"
 
-systemctl enable networkmanager
+systemctl enable NetworkManager
 
 echo "-------------------------------------------------"
 echo "Install Complete, You can reboot now"
