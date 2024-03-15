@@ -28,6 +28,7 @@ Setting up mirrors for optimal download
 sleep 3
 # source $CONFIGS_DIR/setup.conf
 iso=$(curl -4 ifconfig.co/country-iso)
+pacman -Syyu
 timedatectl set-ntp true
 pacman -S --noconfirm archlinux-keyring #update keyrings to latest to prevent packages failing to install
 # setfont ter-v22b
@@ -236,8 +237,8 @@ echo -ne "
 
 pacstrap /mnt linux linux-firmware base base-devel "${CPU}"-ucode vim  --noconfirm --needed
 
-PKG=("grub" "efibootmgr" "networkmanager" "${GPKG[@]}" "git")
-
+PKG=("grub" "efibootmgr" "networkmanager" "git" "${GPKG[@]}")
+# PKG2=("${GPKG[@]}")
 echo -ne "
 -------------------------------------------------------------------------
                           Create fstab
@@ -253,8 +254,7 @@ echo -ne "
 -------------------------------------------------------------------------
 "
 
-cat <<REALEND > /mnt/2-Setup.sh
-#!/bin/bash
+cat <<'REALEND' > /mnt/2-Setup.sh
 
 echo -ne "
 -------------------------------------------------------------------------
@@ -314,9 +314,15 @@ echo "---- Setup Dependencies ----"
 echo "----------------------------"
 
 
-pacman -S --noconfirm "${PKG[@]}"
+# pacman -S --noconfirm "${PKG[@]}"
 
+# pacman -S --noconfirm "${PKG2[@]}"
 
+for pkg in "${PKG[@]}"; do
+    Installing "$pkg"
+    sudo pacman -S --noconfirm "$pkg"
+    
+done
 
 
 
