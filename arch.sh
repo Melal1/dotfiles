@@ -317,10 +317,17 @@ echo "----------------------------"
 # pacman -S --noconfirm "${PKG[@]}"
 
 # pacman -S --noconfirm "${PKG2[@]}"
+# trying to fix the error 
+
+sudo  pacman -S grub efibootmgr networkmanager git 
+
+
 
 for pkg in "${PKG[@]}"; do
     Installing "$pkg"
-    sudo pacman -S --noconfirm "$pkg"
+    # sudo pacman -S --noconfirm "$pkg"
+    sudo pacman -S "$pkg"
+    sleep 3
     
 done
 
