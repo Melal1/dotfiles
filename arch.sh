@@ -219,6 +219,9 @@ echo -ne "
 sec_vm() {
 read -r -p "Are you on virtual machine ? (y/n) : " VM
 if [[ "$VM" == "y" ]] ; then 
+    # echo "GPU=VM" >> /mnt/var.conf
+    echo "GPKG=("xf86-video-fbdev")" >> /mnt/var.conf
+
     echo -ne "Skipping ..."
     sleep 1
 
@@ -226,7 +229,7 @@ if [[ "$VM" == "y" ]] ; then
       gpu_type=$(lspci)
       if grep -E "NVIDIA|GeForce" <<< ${gpu_type}; then
           echo "GPU=NVIDIA" >> /mnt/var.conf
-          echo "GPKG=("nvidia")" >> /mnt/var.conf
+          echo "GPKG=("nvidia" "nvidia-utils")" >> /mnt/var.conf
           
         elif lspci | grep 'VGA' | grep -E "Radeon|AMD"; then
 
@@ -235,11 +238,11 @@ if [[ "$VM" == "y" ]] ; then
 
         elif grep -E "Integrated Graphics Controller" <<< ${gpu_type}; then
           echo "GPU=INTEL" >> /mnt/var.conf
-          echo "GPKG=("libva-intel-driver" "libvdpau-va-gl" "lib32-vulkan-intel" "vulkan-intel" "libva-intel-driver" "libva-utils" "lib32-mesa")" >> /mnt/var.conf
+          echo "GPKG=("xf86-video-intel" "libva-intel-driver" "libvdpau-va-gl" "lib32-vulkan-intel" "vulkan-intel" "libva-intel-driver" "libva-utils" "lib32-mesa")" >> /mnt/var.conf
 
         elif grep -E "Intel Corporation UHD" <<< ${gpu_type}; then
           echo "GPU=INTEL" >> /mnt/var.conf
-          echo "GPKG=("libva-intel-driver" "libvdpau-va-gl" "lib32-vulkan-intel" "vulkan-intel" "libva-intel-driver" "libva-utils" "lib32-mesa")" >> /mnt/var.conf
+          echo "GPKG=("xf86-video-intel" "libva-intel-driver" "libvdpau-va-gl" "lib32-vulkan-intel" "vulkan-intel" "libva-intel-driver" "libva-utils" "lib32-mesa")" >> /mnt/var.conf
 
         else
           echo "Please choose (y/n)"
@@ -298,7 +301,7 @@ echo -ne "
 -------------------------------------------------------------------------
 
 "
-sleep 3
+sleep 2
 
  ln -sf /usr/share/zoneinfo/"$TIMEZONE" /etc/localtime
  hwclock --systohc
@@ -356,8 +359,26 @@ echo -ne "
 -------------------------------------------------------------------------
 "
 
-
 PKG=("grub" "efibootmgr" "networkmanager" "git" "${GPKG[@]}")
+
+fun_ds {
+read -r -p  "Do you want a to install an display server ? (y/n) : " INS
+
+if [[ "$INS"=="y" ]] ; then 
+    PKG+=( "xorg" "xorg-xinit" "feh")
+
+    elif [[ "$INS"=="n" ]] ; then  
+    echo " Not installing any additional packages "
+
+    else
+    fun_ds
+
+ fi
+  
+}
+
+fun_ds
+
 
 
 
@@ -370,6 +391,10 @@ PKG=("grub" "efibootmgr" "networkmanager" "git" "${GPKG[@]}")
  done
 
 
+
+
+
+
 echo -ne "
 
 -------------------------------------------------------------------------
@@ -380,20 +405,18 @@ echo -ne "
 
 if [[ "$GPU" == "AMD" ]]; then
 
-  pacman -S xf86-video-amd
   sed -i 's/^MODULES=()/MODULES=(amdgpu)/' /etc/mkinitcpio.conf
   mkinitcpio -p linux
 
   elif [[ "$GPU" == "NVIDIA" ]]; then
 
-  pacman -S nvidia nvidia-utils 
   sed -i 's/^MODULES=()/MODULES=(nvidia)/' /etc/mkinitcpio.conf
 
   mkinitcpio -p linux
 
 elif [[ "$GPU" == "INTEL" ]]; then
 
-  pacman -S xf86-video-intel
+
   sed -i 's/^MODULES=()/MODULES=(i915)/' /etc/mkinitcpio.conf
 
   mkinitcpio -p linux
