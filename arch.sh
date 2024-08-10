@@ -323,13 +323,13 @@ sudo  pacman -S grub efibootmgr networkmanager git
 
 
 
-for pkg in "${PKG[@]}"; do
-    Installing "$pkg"
-    # sudo pacman -S --noconfirm "$pkg"
-    sudo pacman -S "$pkg"
-    sleep 3
+# for pkg in "${PKG[@]}"; do
+#     Installing "$pkg"
+#     # sudo pacman -S --noconfirm "$pkg"
+#     sudo pacman -S "$pkg"
+#     sleep 3
     
-done
+# done
 
 
 
@@ -368,7 +368,7 @@ echo "----------------------------"
 echo "---- Bootloader install (Grub) ----"
 echo "----------------------------"
 
-grub-install --target=x86_64-efi --efi-directory=$boot --bootloader-id=GRUB
+grub-install --target=x86_64-efi --efi-directory=/$boot --bootloader-id="GRUB"
 grub-mkconfig -o /boot/grub/grub.cfg
   
 echo "----------------------------"
