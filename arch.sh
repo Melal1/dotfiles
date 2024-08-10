@@ -222,28 +222,27 @@ if [[ "$VM" == "y" ]] ; then
     # echo "GPU=VM" >> /mnt/var.conf
     echo "GPKG=("xf86-video-fbdev")" >> /mnt/var.conf
 
-    echo -ne "Skipping ..."
-    sleep 1
-
   elif [[ "$VM" == "n" ]]; then 
       gpu_type=$(lspci)
       if grep -E "NVIDIA|GeForce" <<< ${gpu_type}; then
           echo "GPU=NVIDIA" >> /mnt/var.conf
           echo "GPKG=("nvidia" "nvidia-utils")" >> /mnt/var.conf
+          echo "You have a nvidia gpu"
           
         elif lspci | grep 'VGA' | grep -E "Radeon|AMD"; then
 
           echo "GPU=AMD" >> /mnt/var.conf
           echo "GPKG=("xf86-video-amdgpu")" >> /mnt/var.conf
+          echo "You have a amd gpu"
 
         elif grep -E "Integrated Graphics Controller" <<< ${gpu_type}; then
           echo "GPU=INTEL" >> /mnt/var.conf
           echo "GPKG=("xf86-video-intel" "libva-intel-driver" "libvdpau-va-gl" "lib32-vulkan-intel" "vulkan-intel" "libva-intel-driver" "libva-utils" "lib32-mesa")" >> /mnt/var.conf
-
+          echo "You have a intel gpu"
         elif grep -E "Intel Corporation UHD" <<< ${gpu_type}; then
           echo "GPU=INTEL" >> /mnt/var.conf
           echo "GPKG=("xf86-video-intel" "libva-intel-driver" "libvdpau-va-gl" "lib32-vulkan-intel" "vulkan-intel" "libva-intel-driver" "libva-utils" "lib32-mesa")" >> /mnt/var.conf
-
+          echo "You have a intel gpu"
         else
           echo "Please choose (y/n)"
           sec_vm
@@ -314,6 +313,7 @@ echo -ne "
 
 
 sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf #  enable multilib
+pacman -Syuu
 sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 sed -i 's/^#ar_SA.UTF-8 UTF-8/ar_SA.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
@@ -362,27 +362,6 @@ echo -ne "
 "
 
 PKG=("neovim" "grub" "efibootmgr" "networkmanager" "git" "${GPKG[@]}")
-
-fun_ds {
-read -r -p  "Do you want a to install an display server ? (y/n) : " INS
-
-if [[ "$INS"=="y" ]] ; then 
-    PKG+=("xorg" "xorg-xinit" "feh" "xdg-user-dirs" "neofetch" "firefox")
-
-    elif [[ "$INS"=="n" ]] ; then  
-    echo " Not installing any additional packages "
-
-    else
-    fun_ds
-
- fi
-  
-}
-
-fun_ds
-
-
-
 
 
  for pkg in "${PKG[@]}"; do
