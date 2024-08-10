@@ -312,6 +312,8 @@ echo -ne "
 -------------------------------------------------------------------------
 "
 
+
+sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf #  enable multilib
 sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 sed -i 's/^#ar_SA.UTF-8 UTF-8/ar_SA.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
@@ -359,13 +361,13 @@ echo -ne "
 -------------------------------------------------------------------------
 "
 
-PKG=("grub" "efibootmgr" "networkmanager" "git" "${GPKG[@]}")
+PKG=("neovim" "grub" "efibootmgr" "networkmanager" "git" "${GPKG[@]}")
 
 fun_ds {
 read -r -p  "Do you want a to install an display server ? (y/n) : " INS
 
 if [[ "$INS"=="y" ]] ; then 
-    PKG+=( "xorg" "xorg-xinit" "feh")
+    PKG+=("xorg" "xorg-xinit" "feh" "xdg-user-dirs" "neofetch" "firefox")
 
     elif [[ "$INS"=="n" ]] ; then  
     echo " Not installing any additional packages "
