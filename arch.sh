@@ -15,33 +15,22 @@ echo -ne "
 "
 
 
-# from christitus script 
+
 echo -ne "
 -------------------------------------------------------------------------
                     ArchLinux Installer
-                    NOTE : you need to partition
-                    your disk before run this script 
+                    !!!! NOTE : you need to partition
+                    your disk before run this script !!!!
 -------------------------------------------------------------------------
-
-Setting up mirrors for optimal download
 "
-sleep 3
-# source $CONFIGS_DIR/setup.conf
-iso=$(curl -4 ifconfig.co/country-iso)
+sleep 5
+
+
 pacman -Syyu
 timedatectl set-ntp true
-pacman -S --noconfirm archlinux-keyring #update keyrings to latest to prevent packages failing to install
-# setfont ter-v22b
+pacman -S --noconfirm archlinux-keyring 
 sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
-pacman -S --noconfirm --needed reflector 
-cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-echo -ne "
--------------------------------------------------------------------------
-                    Setting up $iso mirrors for faster downloads
--------------------------------------------------------------------------
-"
-reflector -a 48 -c $iso -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
-mkdir /mnt &>/dev/null # Hiding error message if any
+
 
 echo -ne "
 -------------------------------------------------------------------------
@@ -101,14 +90,13 @@ echo -ne "
 
 while true
  do 
-		read -p "Enter username : " USER1
-		# username regex per response here https://unix.stackexchange.com/questions/157426/what-is-the-regex-to-validate-linux-users
-		# lowercase the username to test regex
-		if [[ "${USER1}" =~ ^[a-z_]([a-z0-9_-]{0,31}|[a-z0-9_-]{0,30}\$)$ ]] ; then
-		  echo "USER=${USER1,,}" >> /mnt/var.conf
+		read -p "Enter username : " preUser
+
+		if [[ "${preUser}" =~ ^[a-z_]([a-z0-9_-]{0,31}|[a-z0-9_-]{0,30}\$)$ ]] ; then
+		  echo "USER=${preUser,,}" >> /mnt/var.conf
 			break
      else 
-		 echo "Incorrect username , check that username complies with username rules"
+		 echo "Incorrect username , the username does not comply with username rules"
     fi
 done 
 
@@ -124,7 +112,8 @@ sec_password() {
   if [[ "$PASS1" == "$PASS2" ]] ; then 
       echo "PASS=${PASS1}" >>  /mnt/var.conf 
    else
-    echo -ne "- ERROR !! - Passwords don't match . \n"
+    echo -ne "\n"
+    echo -ne "\n - ERROR !! - Passwords don't match . \n"
      sec_password
   fi
 }
@@ -148,12 +137,11 @@ if [[ "$timezone_answer" == "y" ]] ; then
   echo -ne "Setting your time zone to '$timezone' "
   echo "TIMEZONE=${timezone}" >> /mnt/var.conf
 
-  # ln -sf /usr/share/zoneinfo/"$timezone" /etc/localtime 
 
   elif [[ "$timezone_answer" == "n" ]]; then
   
   sure() {
-    echo -ne "Please write your time zone ( Ex: Asia/Kuwait ) : \n"
+    echo -ne "Please write your time zone ( Ex: Asia/Damascus ) : \n"
     read -r TIMEZONE 
 
     echo -ne "Your timezone will be set to '$TIMEZONE' \n Continue ? (y/n) : \n"
@@ -178,17 +166,21 @@ timezone
 
 echo -ne "
 -------------------------------------------------------------------------
-                    Determine Microcode
+                    Cpu Type
 -------------------------------------------------------------------------
 "
-# determine processor type and install microcode
 cpu_type=$(lscpu)
 if grep -E "GenuineIntel" <<< ${cpu_type}; then
-    echo "Installing Intel microcode"
+
+    echo "This system runs on intel cpu"
+    echo "Installing Intel Microcode"
+
     CPU="intel"
     
 elif grep -E "AuthenticAMD" <<< ${cpu_type}; then
-    echo "Installing AMD microcode"
+
+    echo "This system runs on amd cpu"
+    echo "Installing AMD Microcode"
     CPU="amd"
     
 fi
@@ -196,9 +188,13 @@ fi
 
 
 echo -ne "
+
 -------------------------------------------------------------------------
                     Determine Graphics Drivers
 -------------------------------------------------------------------------
+
+
+
 "
 
 sec_vm() {
@@ -237,32 +233,36 @@ sec_vm
 
 
 echo -ne "
+
+
 -------------------------------------------------------------------------
                         Installing Arch Base
 -------------------------------------------------------------------------
+
+
 "
 
 pacstrap /mnt linux linux-firmware base base-devel "${CPU}"-ucode vim  --noconfirm --needed
 
 echo -ne "
+
+
 -------------------------------------------------------------------------
                           Create fstab
 -------------------------------------------------------------------------
+
 "
 
 genfstab -u /mnt >> /mnt/etc/fstab
 
 
-echo -ne "
--------------------------------------------------------------------------
-                   Your SYSTEM is Ready for 2-Setup
--------------------------------------------------------------------------
-"
 
-cat <<'REALEND' > /mnt/2-Setup.sh
+
+cat << 'REALEND' > /mnt/2-Setup.sh
 
 source ./var.conf
 echo -ne "
+
 -------------------------------------------------------------------------
 
   ▄▄▄▄███▄▄▄▄      ▄████████  ▄█          ▄████████  ▄█      
@@ -275,11 +275,15 @@ echo -ne "
  ▀█   ███   █▀    ██████████ █████▄▄██   ███    █▀  █████▄▄██
                              ▀                      ▀        
 -------------------------------------------------------------------------
-                             2-Setup
+                             Setup-2 (arch-chroot)
 -------------------------------------------------------------------------
+
 "
+sleep 3
+
  ln -sf /usr/share/zoneinfo/"$TIMEZONE" /etc/localtime
  hwclock --systohc
+ 
 echo -ne "
 -------------------------------------------------------------------------
                           Setting Locale 
@@ -291,6 +295,13 @@ sed -i 's/^#ar_SA.UTF-8 UTF-8/ar_SA.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
 
 
+echo -ne "
+
+-------------------------------------------------------------------------
+                          Adding User
+-------------------------------------------------------------------------
+
+"
 
 echo "$HOSTNAME" >> /etc/hostname
 
@@ -301,20 +312,14 @@ cat <<END > /etc/hosts
 127.0.1.1   $HOSTNAME.localdomain   $HOSTNAME
 END
 
-echo -ne "
--------------------------------------------------------------------------
-                          Adding User 
--------------------------------------------------------------------------
-"
-
 groupadd libvirt
+
 useradd -m -G wheel,libvirt -s /bin/bash $USER
 
-sleep 3
-
-echo "$USER created, home directory created, added to wheel and libvirt group, default shell set to /bin/bash"
+echo "User:$USER created ! "
 
 echo $USER:$PASS | chpasswd
+echo Setting $USER password to $PASS
 
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
@@ -326,6 +331,7 @@ sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 
 echo -ne "
+
 -------------------------------------------------------------------------
                           Installing Packages
 -------------------------------------------------------------------------
@@ -345,11 +351,13 @@ PKG=("grub" "efibootmgr" "networkmanager" "git" "${GPKG[@]}")
  done
 
 
+echo -ne "
 
+-------------------------------------------------------------------------
+                          Mkinitcpio
+-------------------------------------------------------------------------
+"
 
-echo "----------------------------"
-echo "---- Mkinitcpio ----"
-echo "----------------------------"
 
 if [[ "$GPU" == "AMD" ]]; then
 
@@ -377,22 +385,34 @@ else
 
 fi
 
-echo "----------------------------"
-echo "---- Bootloader install (Grub) ----"
-echo "----------------------------"
+echo -ne "
+
+-------------------------------------------------------------------------
+                          Bootloader install (Grub)
+-------------------------------------------------------------------------
+
+"
 
 grub-install --target=x86_64-efi --efi-directory=/$boot --bootloader-id="GRUB"
 grub-mkconfig -o /boot/grub/grub.cfg
-  
-echo "----------------------------"
-echo "---- Services enable ----"
-echo "----------------------------"
+
+
+echo -ne "
+
+-------------------------------------------------------------------------
+                          Services enable
+-------------------------------------------------------------------------
+"
 
 systemctl enable NetworkManager
+echo -ne "
 
-echo "-------------------------------------------------"
-echo "Install Complete, You can reboot now"
-echo "-------------------------------------
+-------------------------------------------------------------------------
+                          Install Complete, You can reboot now
+-------------------------------------------------------------------------
+
+
+"
 
 REALEND
 
