@@ -2,5 +2,5 @@
 
 ### To do list
 
-- [] Add a sound  sound server installer 
-- [] Add the dotfiles github repository installer
+- [ ] Add a sound  sound server installer 
+- [ ] Add the dotfiles github repository installer
