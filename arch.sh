@@ -28,7 +28,7 @@ sleep 5
 
 pacman -Syyu
 timedatectl set-ntp true
-pacman -S --noconfirm archlinux-keyring 
+pacman -S archlinux-keyring --noconfirm
 sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
 
 
@@ -268,7 +268,7 @@ echo -ne "
 
 "
 
-genfstab -u /mnt >> /mnt/etc/fstab
+genfstab -U /mnt >> /mnt/etc/fstab
 
 
 
