@@ -206,28 +206,30 @@ read -r -p "Are you on virtual machine ? (y/n) : " VM
 if [[ "$VM" == "y" ]] ; then 
     echo -ne "Skipping ..."
     sleep 1
+
   elif [[ "$VM" == "n" ]]; then 
       gpu_type=$(lspci)
       if grep -E "NVIDIA|GeForce" <<< ${gpu_type}; then
-          # pacman -S --noconfirm --needed nvidia
           echo "GPU=NVIDIA" >> /mnt/var.conf
-          GPKG=("nvidia")
+          echo "GPKG=("nvidia")" >> /mnt/var.conf
+          
         elif lspci | grep 'VGA' | grep -E "Radeon|AMD"; then
-          # pacman -S --noconfirm --needed xf86-video-amdgpu
+
           echo "GPU=AMD" >> /mnt/var.conf
-          GPKG=("xf86-video-amdgpu")
+          echo "GPKG=("xf86-video-amdgpu")" >> /mnt/var.conf
+
         elif grep -E "Integrated Graphics Controller" <<< ${gpu_type}; then
-        # pacman -S --noconfirm --needed libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
           echo "GPU=INTEL" >> /mnt/var.conf
-          GPKG=("libva-intel-driver" "libvdpau-va-gl" "lib32-vulkan-intel" "vulkan-intel" "libva-intel-driver" "libva-utils" "lib32-mesa")
+          echo "GPKG=("libva-intel-driver" "libvdpau-va-gl" "lib32-vulkan-intel" "vulkan-intel" "libva-intel-driver" "libva-utils" "lib32-mesa")" >> /mnt/var.conf
 
         elif grep -E "Intel Corporation UHD" <<< ${gpu_type}; then
-        # pacman -S --needed --noconfirm libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
           echo "GPU=INTEL" >> /mnt/var.conf
-          GPKG=("libva-intel-driver" "libvdpau-va-gl" "lib32-vulkan-intel" "vulkan-intel" "libva-intel-driver" "libva-utils" "lib32-mesa")
+          echo "GPKG=("libva-intel-driver" "libvdpau-va-gl" "lib32-vulkan-intel" "vulkan-intel" "libva-intel-driver" "libva-utils" "lib32-mesa")" >> /mnt/var.conf
+
         else
           echo "Please choose (y/n)"
           sec_vm
+
        fi
 fi
 }
@@ -242,8 +244,6 @@ echo -ne "
 
 pacstrap /mnt linux linux-firmware base base-devel "${CPU}"-ucode vim  --noconfirm --needed
 
-PKG=("grub" "efibootmgr" "networkmanager" "git" "${GPKG[@]}")
-# PKG2=("${GPKG[@]}")
 echo -ne "
 -------------------------------------------------------------------------
                           Create fstab
@@ -316,6 +316,7 @@ echo "$USER created, home directory created, added to wheel and libvirt group, d
 
 echo $USER:$PASS | chpasswd
 
+sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 # Add sudo no password rights
 # sed -i 's/^# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
@@ -324,27 +325,24 @@ echo $USER:$PASS | chpasswd
 
 
 
-echo "----------------------------"
-echo "---- Setup Dependencies ----"
-echo "----------------------------"
+echo -ne "
+-------------------------------------------------------------------------
+                          Installing Packages
+-------------------------------------------------------------------------
+"
 
 
-# pacman -S --noconfirm "${PKG[@]}"
-
-# pacman -S --noconfirm "${PKG2[@]}"
-# trying to fix the error 
-
-sudo  pacman -S grub efibootmgr networkmanager git 
+PKG=("grub" "efibootmgr" "networkmanager" "git" "${GPKG[@]}")
 
 
 
-# for pkg in "${PKG[@]}"; do
-#     Installing "$pkg"
-#     # sudo pacman -S --noconfirm "$pkg"
-#     sudo pacman -S "$pkg"
-#     sleep 3
+
+ for pkg in "${PKG[@]}"; do
+     echo Installing "$pkg" ....
+    sudo pacman -S "$pkg" --noconfirm --needed
+     
     
-# done
+ done
 
 
 
