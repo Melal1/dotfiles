@@ -23,7 +23,7 @@ echo -ne "
                     your disk before run this script !!!!
 -------------------------------------------------------------------------
 "
-sleep 5
+sleep 2
 
 
 pacman -Syyu
@@ -63,7 +63,7 @@ echo -ne "
 Mounted /dev/"$MAIN" with /mnt
 
 "
-sleep 1
+
 
 boot="boot/efi"
 echo "boot=${boot}" >> /mnt/var.conf
@@ -72,7 +72,7 @@ mkdir -p /mnt/"$boot"
 echo -ne "
 Created /mnt/$boot
 "
-sleep 1
+
 
 mount /dev/"$EFI" /mnt/"$boot"
 
@@ -102,7 +102,7 @@ echo -ne "
           PreSetup
 -------------------------------------------------------------------------
 "
-sleep 1
+
 
 
 while true
@@ -130,7 +130,11 @@ sec_password() {
       echo "PASS=${PASS1}" >>  /mnt/var.conf 
    else
     echo -ne "\n"
-    echo -ne "\n - ERROR !! - Passwords don't match . \n"
+    echo -ne "
+    
+     - ERROR !! - Passwords don't match . \n
+     
+     "
      sec_password
   fi
 }
@@ -191,7 +195,7 @@ if grep -E "GenuineIntel" <<< ${cpu_type}; then
 
     echo "This system runs on intel cpu"
     echo "Installing Intel Microcode"
-    sleep 1
+    
     CPU="intel"
     
 elif grep -E "AuthenticAMD" <<< ${cpu_type}; then
@@ -199,7 +203,7 @@ elif grep -E "AuthenticAMD" <<< ${cpu_type}; then
     echo "This system runs on amd cpu"
     echo "Installing AMD Microcode"
     CPU="amd"
-    sleep 1
+    
 fi
 
 
@@ -245,7 +249,7 @@ if [[ "$VM" == "y" ]] ; then
 fi
 }
 sec_vm
-
+sleep 2
 
 echo -ne "
 
