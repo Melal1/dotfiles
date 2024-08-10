@@ -1,3 +1,0 @@
-# Wallpaper
-nitrogen --restore &
-
