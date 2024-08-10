@@ -26,9 +26,9 @@ echo -ne "
 sleep 2
 
 
-pacman -Syyu
+pacman -Syyu --noconfirm --needed
 timedatectl set-ntp true
-pacman -S archlinux-keyring --noconfirm
+pacman -S archlinux-keyring --noconfirm --needed
 sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
 
 
