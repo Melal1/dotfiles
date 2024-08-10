@@ -174,7 +174,7 @@ if grep -E "GenuineIntel" <<< ${cpu_type}; then
 
     echo "This system runs on intel cpu"
     echo "Installing Intel Microcode"
-
+    sleep 1
     CPU="intel"
     
 elif grep -E "AuthenticAMD" <<< ${cpu_type}; then
@@ -182,7 +182,7 @@ elif grep -E "AuthenticAMD" <<< ${cpu_type}; then
     echo "This system runs on amd cpu"
     echo "Installing AMD Microcode"
     CPU="amd"
-    
+    sleep 1
 fi
 
 
