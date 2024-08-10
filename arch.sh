@@ -71,6 +71,7 @@ mount /dev/"$MAIN" /mnt
 
 echo -ne "Mounted /dev/"$MAIN" with /mnt"
 boot="boot/efi"
+echo "boot=${boot}" >> /mnt/var.conf
 mkdir -p /mnt/"$boot"
 echo -ne "Created /mnt/$boot "
 mount /dev/"$EFI" /mnt/"$boot"
@@ -104,7 +105,7 @@ while true
 		# username regex per response here https://unix.stackexchange.com/questions/157426/what-is-the-regex-to-validate-linux-users
 		# lowercase the username to test regex
 		if [[ "${USER1}" =~ ^[a-z_]([a-z0-9_-]{0,31}|[a-z0-9_-]{0,30}\$)$ ]] ; then
-		  user="${USER1,,}"
+		  echo "USER=${USER1,,}" >> /mnt/var.conf
 			break
      else 
 		 echo "Incorrect username , check that username complies with username rules"
@@ -113,6 +114,7 @@ done
 
 
 read -r -p "Enter hostname : " HOSTNAME
+echo "HOSTNAME=${HOSTNAME}" >> /mnt/var.conf
 echo -ne "\n"
 
 sec_password() {
@@ -120,7 +122,7 @@ sec_password() {
   echo -ne "\n"
   read -r -p "Re-enter your password : " PASS2
   if [[ "$PASS1" == "$PASS2" ]] ; then 
-      PASS="$PASS1"
+      echo "PASS=${PASS1}" >>  /mnt/var.conf 
    else
     echo -ne "- ERROR !! - Passwords don't match . \n"
      sec_password
@@ -144,6 +146,8 @@ read -r timezone_answer
 
 if [[ "$timezone_answer" == "y" ]] ; then
   echo -ne "Setting your time zone to '$timezone' "
+  echo "TIMEZONE=${timezone}" >> /mnt/var.conf
+
   # ln -sf /usr/share/zoneinfo/"$timezone" /etc/localtime 
 
   elif [[ "$timezone_answer" == "n" ]]; then
@@ -157,6 +161,7 @@ if [[ "$timezone_answer" == "y" ]] ; then
 
     if [[ "${continue}" == "y" ]]; then
       echo -ne "Setting your timezone to $TIMEZONE"
+      echo "TIMEZONE=${TIMEZONE}" >> /mnt/var.conf
       else
         sure
     fi
@@ -205,20 +210,20 @@ if [[ "$VM" == "y" ]] ; then
       gpu_type=$(lspci)
       if grep -E "NVIDIA|GeForce" <<< ${gpu_type}; then
           # pacman -S --noconfirm --needed nvidia
-          GPU="NVIDIA"
+          echo "GPU=NVIDIA" >> /mnt/var.conf
           GPKG=("nvidia")
         elif lspci | grep 'VGA' | grep -E "Radeon|AMD"; then
           # pacman -S --noconfirm --needed xf86-video-amdgpu
-          GPU="AMD"
+          echo "GPU=AMD" >> /mnt/var.conf
           GPKG=("xf86-video-amdgpu")
         elif grep -E "Integrated Graphics Controller" <<< ${gpu_type}; then
         # pacman -S --noconfirm --needed libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
-          GPU="INTEL"        
+          echo "GPU=INTEL" >> /mnt/var.conf
           GPKG=("libva-intel-driver" "libvdpau-va-gl" "lib32-vulkan-intel" "vulkan-intel" "libva-intel-driver" "libva-utils" "lib32-mesa")
 
         elif grep -E "Intel Corporation UHD" <<< ${gpu_type}; then
         # pacman -S --needed --noconfirm libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa
-          GPU="INTEL"
+          echo "GPU=INTEL" >> /mnt/var.conf
           GPKG=("libva-intel-driver" "libvdpau-va-gl" "lib32-vulkan-intel" "vulkan-intel" "libva-intel-driver" "libva-utils" "lib32-mesa")
         else
           echo "Please choose (y/n)"
@@ -256,6 +261,7 @@ echo -ne "
 
 cat <<'REALEND' > /mnt/2-Setup.sh
 
+source ./var.conf
 echo -ne "
 -------------------------------------------------------------------------
 
@@ -273,6 +279,7 @@ echo -ne "
 -------------------------------------------------------------------------
 "
  ln -sf /usr/share/zoneinfo/"$TIMEZONE" /etc/localtime
+ hwclock --systohc
 echo -ne "
 -------------------------------------------------------------------------
                           Setting Locale 
@@ -302,11 +309,19 @@ echo -ne "
 
 groupadd libvirt
 useradd -m -G wheel,libvirt -s /bin/bash $USER
+
+sleep 3
+
 echo "$USER created, home directory created, added to wheel and libvirt group, default shell set to /bin/bash"
 
+echo $USER:$PASS | chpasswd
+
+
 # Add sudo no password rights
-sed -i 's/^# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
-sed -i 's/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
+# sed -i 's/^# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
+# sed -i 's/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
+
+
 
 
 echo "----------------------------"
