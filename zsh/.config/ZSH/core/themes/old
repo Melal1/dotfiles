@@ -1,6 +1,0 @@
-# Enable colors and change prompt:
-#PS1 stands for the default PROMPT in /private/etc/zshrc
-#PS1="%B%{$fg[red]%}[%{$fg[yellow]%}M%{$fg[green]%}e%{$fg[blue]%}l%{$fg[yellow]%}a%{$fg[red]%}l%{$fg[magenta]%} %1~ %{$fg[red]%}]%{$fg[white]%}%b\n ➜ %{$reset_color%} "
-#PS1="%B${Red}[${Yellow}M${Green}e${Blue}l${Yellow}a${Red}l${Magenta} %1~ ${Red}]%b${White} ➜ ${Res}"
-
-
