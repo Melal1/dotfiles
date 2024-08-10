@@ -58,15 +58,32 @@ echo -ne "
 "
 mount /dev/"$MAIN" /mnt
 
-echo -ne "Mounted /dev/"$MAIN" with /mnt"
+echo -ne "
+
+Mounted /dev/"$MAIN" with /mnt
+
+"
+sleep 1
+
 boot="boot/efi"
 echo "boot=${boot}" >> /mnt/var.conf
 mkdir -p /mnt/"$boot"
-echo -ne "Created /mnt/$boot "
-mount /dev/"$EFI" /mnt/"$boot"
-echo -ne "Mounted /dev/"$EFI" with /mnt"
 
-echo -ne "Done !!"
+echo -ne "
+Created /mnt/$boot
+"
+sleep 1
+
+mount /dev/"$EFI" /mnt/"$boot"
+
+echo -ne "
+Mounted /dev/"$EFI" with /mnt
+"
+sleep 1 
+
+echo -ne " 
+Done !!
+"
 
 echo -ne "\n"
 echo -ne "
@@ -82,10 +99,10 @@ echo -ne "
  ▀█   ███   █▀    ██████████ █████▄▄██   ███    █▀  █████▄▄██
                              ▀                      ▀        
 -------------------------------------------------------------------------
-          Please select presetup settings for your system
+          PreSetup
 -------------------------------------------------------------------------
 "
-
+sleep 1
 
 
 while true
@@ -192,8 +209,6 @@ echo -ne "
 -------------------------------------------------------------------------
                     Determine Graphics Drivers
 -------------------------------------------------------------------------
-
-
 
 "
 
